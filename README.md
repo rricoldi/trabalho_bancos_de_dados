@@ -23,4 +23,7 @@ Um usuário acessa o site, e caso não esteja logado aparece as opções de cada
 ## 📖 Diagrama E-R
 <img src="https://i.imgur.com/X7JZPN1.png" width="800">
 
+## 📑 Modelo Relacional
+<img src="https://i.imgur.com/jCQafQc.jpg" width="800">
+
 
