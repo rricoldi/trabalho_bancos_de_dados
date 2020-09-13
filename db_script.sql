@@ -28,8 +28,8 @@ create table trabalho.usuario(
 
 create table trabalho.usuario_esta_inscrito_no_podcast(
 	classificacao int not null,
-    rss_feed char(200),
-    email char(100),
+    rss_feed char(200) unique,
+    email char(100) unique,
     constraint pk_usuario_podcast PRIMARY KEY(email, rss_feed),
     constraint fk_inscrito_podcast foreign key(rss_feed)
 		references trabalho.podcast(rss_feed)
@@ -43,7 +43,7 @@ create table trabalho.comentarios_podcast_usuario(
 	comentario text not null,
     rss_feed char(200),
     email char(100),
-    constraint pk_usuario_podcast PRIMARY KEY(email, rss_feed),
+    constraint pk_comentario_usuario_podcast PRIMARY KEY(email, rss_feed),
     constraint fk_comentario_podcast foreign key(rss_feed)
 		references trabalho.usuario_esta_inscrito_no_podcast(rss_feed)
         on update cascade on delete cascade,
@@ -52,4 +52,4 @@ create table trabalho.comentarios_podcast_usuario(
         on update cascade on delete cascade
 );
 
-#drop schema trabalho;
+--drop schema trabalho cascade;
