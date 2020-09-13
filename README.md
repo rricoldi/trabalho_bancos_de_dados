@@ -5,7 +5,7 @@ Como trabalho da disciplina de bancos de dados, será realizado o desenvolviment
 
 
 ## 🛠 Ferramentas
-<p align="left"><img src="https://agoncal.files.wordpress.com/2014/05/java_ee_logo_vert_v2.png" width="80"><img src="https://lh3.googleusercontent.com/proxy/4xbH_WNyDC_9BvBVCvGzYhrKO3XDEsFUkicxx9B4Mj-Gxj7wvI4aA8W6oxOG825QCrfdCnsN1z0A-b44LUTkwdn3z_89vDsyi_DzLg7e9H3tyCLgyrK5FkZ4HFS3hnN8CI9Ahq5lvlWQjHNN9NgmlLE" width="80"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png" width="80"></p>
+<p align="left"><img src="https://agoncal.files.wordpress.com/2014/05/java_ee_logo_vert_v2.png" width="80"><img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" width="80"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png" width="80"></p>
 
 ## 💡 Ideia
 A ideia do projeto consiste em um agregador de podcasts, que dará suporte pra cadastro de usuários e de podcasts, através do feed rss, permitindo que os usuários ouçam o podcast, comentar e classificar o podcast. Os usuários também podem pesquisar por podcasts. Há também os gráficos e relatórios com dados do público de cada podcast.
