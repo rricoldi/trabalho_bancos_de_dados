@@ -195,4 +195,8 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
         return usuarioList;
     }
+    
+    @Override
+    public void authenticate(Usuario usuario) throws SQLException, SecurityException {
+    }
 }
