@@ -21,7 +21,7 @@ create table trabalho.usuario(
     nome char(100) not null,
     sexo char(100) not null,
     idade int not null,
-    senha char(30) not null,
+    senha char(32) not null,
     pais char(50) not null,
     constraint pk_usuario PRIMARY KEY(email)
 );
