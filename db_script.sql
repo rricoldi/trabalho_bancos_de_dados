@@ -1,15 +1,15 @@
 create schema trabalho;
 
 create table trabalho.podcast(
-	rss_feed char(200),
-    nome char(100) not null,
-    site char(200) not null,
+	rss_feed varchar(200),
+    nome varchar(100) not null,
+    site varchar(200) not null,
     constraint pk_podcast PRIMARY KEY(rss_feed)
 );
 
 create table trabalho.tags_podcast(
-	tag char(30),
-    rss_feed char(200),
+	tag varchar(30),
+    rss_feed varchar(200),
     constraint pk_tags_podcast PRIMARY KEY(tag, rss_feed),
     constraint fk_podcast foreign key(rss_feed)
 		references trabalho.podcast(rss_feed)
@@ -17,19 +17,19 @@ create table trabalho.tags_podcast(
 );
 
 create table trabalho.usuario(
-	email char(100),
-    nome char(100) not null,
-    sexo char(100) not null,
+	email varchar(100),
+    nome varchar(100) not null,
+    sexo varchar(100) not null,
     idade int not null,
-    senha char(32) not null,
-    pais char(50) not null,
+    senha varchar(32) not null,
+    pais varchar(50) not null,
     constraint pk_usuario PRIMARY KEY(email)
 );
 
 create table trabalho.usuario_esta_inscrito_no_podcast(
 	classificacao int not null,
-    rss_feed char(200) unique,
-    email char(100) unique,
+    rss_feed varchar(200) unique,
+    email varchar(100) unique,
     constraint pk_usuario_podcast PRIMARY KEY(email, rss_feed),
     constraint fk_inscrito_podcast foreign key(rss_feed)
 		references trabalho.podcast(rss_feed)
@@ -41,8 +41,8 @@ create table trabalho.usuario_esta_inscrito_no_podcast(
 
 create table trabalho.comentarios_podcast_usuario(
 	comentario text not null,
-    rss_feed char(200),
-    email char(100),
+    rss_feed varchar(200),
+    email varchar(100),
     constraint pk_comentario_usuario_podcast PRIMARY KEY(email, rss_feed),
     constraint fk_comentario_podcast foreign key(rss_feed)
 		references trabalho.usuario_esta_inscrito_no_podcast(rss_feed)
