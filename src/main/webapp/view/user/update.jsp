@@ -4,22 +4,24 @@
 <html>
     <head>
         <%@include file="/view/include/head.jsp" %>
-        <title>Cadastro de usuário!</title>
+        <title>Atualização de usuário!</title>
     </head>
     <body>
 
         <div class="container">
-            <h2 class="text-center">Cadastro de um novo usuário</h2>
+            <h2 class="text-center">Atualização dos dados do usuário <c:out value="${usario.nome}"/></h2>
 
             <form
                 class="form"
-                action="${pageContext.servletContext.contextPath}/user/create"
+                action="${pageContext.servletContext.contextPath}/user/update"
                 enctype="form-data"
                 method="POST">
+                
+                <input type="hidden" name="email" value="${usuario.email}">
 
                 <div class="form-group">
                     <label class="control-label" for="usuario-email">E-mail</label>
-                    <input id="usuario-email" class="form-control" placeholder="podcast@mail.com" type="email" name="email" required autofocus/>
+                    <input id="usuario-email" class="form-control" value="${usuario.email}" type="email" name="email" required autofocus/>
 
                     <p class="help-block"></p>
                 </div>
@@ -29,25 +31,25 @@
                     <label class="control-label">Senha</label>
                     <input class="form-control password-input"
                            type="password" name="senha" placeholder="********"
-                           pattern=".{8,}" required title="Pelo menos 8 caracteres."/>
+                           pattern=".{8,}" title="Pelo menos 8 caracteres."/>
                 </div>
 
                 <div class="form-group pwd-confirm">
                     <label class="control-label">Confirmar senha</label>
                     <input class="form-control password-confirm"
                            type="password" name="senha-confirmacao" placeholder="********"
-                           pattern=".{8,}" required title="Pelo menos 8 caracteres."/>
+                           pattern=".{8,}" title="Pelo menos 8 caracteres."/>
                     <p class="help-block"></p>
                 </div>
 
                 <div class="form-group">
                     <label for="usuario-nome" class="control-label">Nome</label>
-                    <input id="usuario-nome" class="form-control" placeholder="Podcaster da Silva" type="text" name="nome" required/>
+                    <input id="usuario-nome" class="form-control" value="${usuario.nome}" type="text" name="nome" required/>
                 </div>
 
                 <div class="form-group">
                     <label for="usuario-idade" class="control-label">Idade</label>
-                    <input id="usuario-idade" class="form-control" type="number" placeholder="18" name="idade" required/>
+                    <input id="usuario-idade" class="form-control" type="number" value="${usuario.idade}" name="idade" required/>
                 </div>
 
                 <div class="form-group">
@@ -312,7 +314,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button class="btn btn-lg btn-primary" type="submit">Cadastrar</button>
+                    <button class="btn btn-lg btn-primary" type="submit">Atualizar</button>
                 </div>
             </form>
         </div>

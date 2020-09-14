@@ -25,7 +25,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
     private static final String UPDATE_QUERY =
                                 "UPDATE trabalho.usuario " +
-                                "SET(nome = ?, idade = ?, sexo = ?, pais = ? " +
+                                "SET nome = ?, idade = ?, sexo = ?, pais = ? " +
                                 "WHERE email = ?;";
 
     private static final String UPDATE_WITH_PASSWORD_QUERY =
@@ -115,14 +115,14 @@ public class PgUsuarioDAO implements UsuarioDAO {
     public void update(Usuario usuario) throws SQLException {
         String query;
 
-        if ((usuario.getSenha().isBlank()) || (usuario.getSenha() == null)) {
+        if ((usuario.getSenha().trim().length() == 0) || (usuario.getSenha() == null)) {
             query = UPDATE_QUERY;
         } else {
             query = UPDATE_WITH_PASSWORD_QUERY;
         }
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            if ((usuario.getSenha().isBlank()) || (usuario.getSenha() == null)) {
+            if ((usuario.getSenha().trim().length() == 0) || (usuario.getSenha() == null)) {
                 statement.setString(1, usuario.getNome());
                 statement.setInt(2, usuario.getIdade());
                 statement.setString(3, usuario.getSexo());

@@ -27,7 +27,11 @@ import model.Usuario;
  * @author renan
  */
 @WebServlet(name = "UserController", 
-        urlPatterns = {"/user", "/user/create"})
+        urlPatterns = {
+            "/user", 
+            "/user/create", 
+            "/user/update"
+        })
 public class UserController extends HttpServlet {
 
     /**
@@ -91,6 +95,20 @@ public class UserController extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("/view/user/create.jsp");
                 dispatcher.forward(request, response);
                 break;
+             
+            case "/user/update":
+                try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getUsuarioDAO();
+
+                    usuario = dao.read(request.getParameter("email"));
+                    request.setAttribute("usuario", usuario);
+                    
+                    dispatcher = request.getRequestDispatcher("/view/user/update.jsp");
+                    dispatcher.forward(request, response);
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+                break;
         }
     }
 
@@ -111,8 +129,11 @@ public class UserController extends HttpServlet {
         
         HttpSession session = request.getSession();
         
+        String servletPath = request.getServletPath();
+        
         switch(request.getServletPath()) {                
             case "/user/create":
+            case "/user/update":
                 usuario.setEmail(request.getParameter("email"));
                 usuario.setSenha(request.getParameter("senha"));
                 usuario.setNome(request.getParameter("nome"));
@@ -122,11 +143,15 @@ public class UserController extends HttpServlet {
                 
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
                     dao = daoFactory.getUsuarioDAO();
-                    dao.create(usuario);
+                    if(servletPath.equals("/user/create")) {
+                        dao.create(usuario);                        
+                    } else {
+                        dao.update(usuario);
+                    }
                     response.sendRedirect(request.getContextPath() + "/user");
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
-                    response.sendRedirect(request.getContextPath() + "/user/create");
+                    response.sendRedirect(request.getContextPath() + servletPath);
                 }
                 
                 break;
