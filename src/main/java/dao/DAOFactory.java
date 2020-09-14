@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import java.io.IOException;
@@ -11,24 +6,14 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import jdbc.ConnectionFactory;
 
-/**
- *
- * @author dskaster
- */
 public abstract class DAOFactory implements AutoCloseable {
-
-    protected Connection connection;
+         protected Connection connection;
      
     public static DAOFactory getInstance() throws ClassNotFoundException, IOException, SQLException {
         Connection connection = ConnectionFactory.getInstance().getConnection();
         DAOFactory factory;
-        
-        if (ConnectionFactory.getDbServer().equals("postgresql")) {
-            factory = new PgDAOFactory(connection);
-        }
-        else {
-            throw new RuntimeException("Servidor de banco de dados não suportado.");
-        }
+     
+        factory = new PgDAOFactory(connection);
         
         return factory;
     }    
@@ -103,7 +88,7 @@ public abstract class DAOFactory implements AutoCloseable {
         }
     }
 
-    public abstract UserDAO getUserDAO();
+    public abstract UsuarioDAO getUsuarioDAO();
 
     @Override
     public void close() throws SQLException {
@@ -111,4 +96,3 @@ public abstract class DAOFactory implements AutoCloseable {
     }
 
 }
-

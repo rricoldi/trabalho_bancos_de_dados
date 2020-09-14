@@ -1,46 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jdbc;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
-/**
- *
- * @author dskaster
- */
 public class PgConnectionFactory extends ConnectionFactory {
-
     private String dbHost;
     private String dbPort;
     private String dbName;
     private String dbUser;
-    private String dbPassword;    
+    private String dbPassword;
     
     public void readProperties() throws IOException {
-        Properties properties = new Properties();
-
-        try {
-            InputStream input = this.getClass().getClassLoader().getResourceAsStream(propertiesPath);
-            properties.load(input);
-
-            dbHost = properties.getProperty("host");
-            dbPort = properties.getProperty("port");
-            dbName = properties.getProperty("name");
-            dbUser = properties.getProperty("user");
-            dbPassword = properties.getProperty("password");
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-
-            throw new IOException("Erro ao obter informações do banco de dados.");
-        }
+        dbHost = "localhost";
+        dbPort = "5432";
+        dbName = "db_trab";
+        dbUser = "postgres";
+        dbPassword = "password";
     }
 
     @Override
@@ -48,7 +25,7 @@ public class PgConnectionFactory extends ConnectionFactory {
         Connection connection = null;
 
         try {
-             Class.forName("org.postgresql.Driver");
+            Class.forName("org.postgresql.Driver");
 
             readProperties();
 
@@ -64,7 +41,6 @@ public class PgConnectionFactory extends ConnectionFactory {
 
             throw new SQLException("Erro de conexão ao banco de dados.");
         }
-
         return connection;
     }
     
