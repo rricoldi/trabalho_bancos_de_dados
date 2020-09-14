@@ -5,6 +5,8 @@
  */
 package controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dao.DAO;
 import dao.DAOFactory;
 import java.io.IOException;
@@ -29,8 +31,10 @@ import model.Usuario;
 @WebServlet(name = "UserController", 
         urlPatterns = {
             "/user", 
-            "/user/create", 
-            "/user/update"
+            "/user/create",
+            "/user/read",
+            "/user/update",
+            "/user/delete"
         })
 public class UserController extends HttpServlet {
 
@@ -95,6 +99,22 @@ public class UserController extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("/view/user/create.jsp");
                 dispatcher.forward(request, response);
                 break;
+            
+            case "/user/read":
+                try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getUsuarioDAO();
+
+                    usuario = dao.read(request.getParameter("email"));
+                    
+                    Gson gson = new GsonBuilder().create();
+                    String json = gson.toJson(usuario);
+                    
+                    response.getOutputStream().print(json);
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                    response.sendRedirect(request.getContextPath() + "/user");
+                }
+                break;
              
             case "/user/update":
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
@@ -107,7 +127,17 @@ public class UserController extends HttpServlet {
                     dispatcher.forward(request, response);
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
+                    response.sendRedirect(request.getContextPath() + "/user");
                 }
+                break;
+            case "/user/delete":
+                try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getUsuarioDAO();
+                    dao.delete(request.getParameter("email"));
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+                response.sendRedirect(request.getContextPath() + "/user");
                 break;
         }
     }
@@ -153,7 +183,29 @@ public class UserController extends HttpServlet {
                     request.getSession().setAttribute("error", ex.getMessage());
                     response.sendRedirect(request.getContextPath() + servletPath);
                 }
+                break;
+            case "/user/delete":
+                String usuarios[] = request.getParameterValues("delete");
                 
+                try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getUsuarioDAO();
+                    try {
+                        daoFactory.beginTransaction();
+                        
+                        for(String usuarioEmail : usuarios) {
+                            dao.delete(usuarioEmail);
+                        }
+                        
+                        daoFactory.commitTransaction();
+                        daoFactory.endTransaction();
+                    } catch(SQLException ex) {
+                        request.getSession().setAttribute("error", ex.getMessage());
+                        daoFactory.rollbackTransaction();
+                    }
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+                response.sendRedirect(request.getContextPath() + "/user");
                 break;
         }
     }

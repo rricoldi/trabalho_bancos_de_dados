@@ -37,18 +37,15 @@ function deleteUsers(e) {
 function readUser(e) {
     e.preventDefault();
     $.get($(this).data('href'), function (data) {
-        var usuario = JSON.parse(data);
-        var avatar = 'default_avatar.png';
+        const usuario = JSON.parse(data);
+        console.log(usuario);
         var $modal = $('.modal-visualizar-usuario');
 
-        $modal.find('.p_id').html('<strong>ID: </strong>' + usuario.id);
-        $modal.find(".p_login").html('<strong>Login: </strong>' + usuario.login);
-        $modal.find('.p_nome').html('<strong>Nome: </strong>' + usuario.nome);
-        $modal.find('.p_nascimento').html('<strong>Data de nascimento: </strong>' + usuario.nascimento);
-        if (usuario.avatar) {
-            avatar = usuario.avatar;
-        }
-        $modal.find('.usuario-img').prop('src', $.url("//img/" + avatar));
+        $modal.find(".p_email").html('<strong>E-mail: </strong>' + usuario.email);
+        $modal.find(".p_nome").html('<strong>Nome: </strong>' + usuario.nome);
+        $modal.find(".p_idade").html('<strong>Idade: </strong>' + usuario.idade);
+        $modal.find(".p_sexo").html('<strong>Sexo: </strong>' + usuario.sexo);
+        $modal.find(".p_pais").html('<strong>País: </strong>' + usuario.pais);
         
         $modal.modal();
     });
