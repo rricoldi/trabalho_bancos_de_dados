@@ -6,60 +6,50 @@
 <html>
     <head>
         <%@include file="/view/include/head.jsp"%>
-        <title>Usuários do Podcast</title>
+        <title>Podcasts</title>
     </head>
     <body>
 
         <div class="container">
             
             <div class="text-center div_inserir_excluir">
-                <a class="btn btn-lg btn-primary" href="${pageContext.servletContext.contextPath}/user/create">
-                    Inserir novo usuário
+                <a class="btn btn-lg btn-primary" href="${pageContext.servletContext.contextPath}/podcast/create">
+                    Inserir novo podcast
                 </a>
 
-                <button class="btn btn-lg btn-warning" data-toggle="modal" data-target=".modal_excluir_usuarios">
-                    Excluir múltiplos usuários
+                <button class="btn btn-lg btn-warning" data-toggle="modal" data-target=".modal_excluir_podcasts">
+                    Excluir múltiplos podcasts
                 </button>
-                <a class="btn btn-default"
-                   href="${pageContext.servletContext.contextPath}/logout"
-                   data-toggle="tooltip"
-                   data-original-title="Logout">
-                    <i class="fa fa-sign-out"></i>
-                </a>
             </div>
 
-            <form class="form_excluir_usuarios" action="${pageContext.servletContext.contextPath}/user/delete" method="POST">
+            <form class="form_excluir_podcasts" action="${pageContext.servletContext.contextPath}/podcast/delete" method="POST">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="h4">E-mail</th>
                             <th class="col-lg-6 h4">Nome</th>
                             <th class="col-sm-5 h4 text-center">Ação</th>
                             <th class="col-sm-1 h4 text-center">Excluir?</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="usuario" items="${requestScope.usuarioList}">
+                        <c:forEach var="podcast" items="${requestScope.podcastList}">
                             <tr>
-                                <td>
-                                    <span class="h4"><c:out value="${usuario.email}"/></span>
-                                </td>
-                                <td class="row">
-                                    <a class="link_visualizar_usuario" href="#" data-href="${pageContext.servletContext.contextPath}/user/read?email=${usuario.email}">
-                                        <span class="h4"><c:out value="${usuario.nome}"/></span>
+                                <td class="">
+                                    <a class="link_visualizar_podcast" href="#" data-href="${pageContext.servletContext.contextPath}/podcast/read?rss_feed=${podcast.rss_feed}">
+                                        <span class="h4"><c:out value="${podcast.nome}"/></span>
                                     </a>
                                 </td>
                                 <td class="col text-center">
                                     <div class="row text-center">
                                         <a class="btn btn-default"
-                                            href="${pageContext.servletContext.contextPath}/user/update?email=${usuario.email}"
+                                            href="${pageContext.servletContext.contextPath}/podcast/update?rss_feed=${podcast.rss_feed}"
                                             data-toggle="tooltip"
                                             data-original-title="Editar">
                                              <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a class="btn btn-default link_excluir_usuario"
+                                        <a class="btn btn-default link_excluir_podcast"
                                             href="#"
-                                            data-href="${pageContext.servletContext.contextPath}/user/delete?email=${usuario.email}"
+                                            data-href="${pageContext.servletContext.contextPath}/podcast/delete?rss_feed=${podcast.rss_feed}"
                                             data-toggle="tooltip"
                                             data-original-title="Excluir">
                                              <i class="fa fa-trash"></i>
@@ -67,14 +57,14 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <input class="checkbox-inline" type="checkbox" name="delete" value="${usuario.email}" />
+                                    <input class="checkbox-inline" type="checkbox" name="delete" value="${podcast.rss_feed}" />
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
             </form>
-            <div class="modal fade modal_excluir_usuario">
+            <div class="modal fade modal_excluir_podcast">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -82,17 +72,17 @@
                             <button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <p>Tem certeza de que deseja excluir este usuário?</p>
+                            <p>Tem certeza de que deseja excluir este podcast?</p>
                         </div>
                         <div class="modal-footer">
-                            <a class="btn btn-danger link_confirmacao_excluir_usuario">Sim</a>
+                            <a class="btn btn-danger link_confirmacao_excluir_podcast">Sim</a>
                             <button class="btn btn-primary" type="button" data-dismiss="modal">Não</button>
                         </div>
                     </div>
                 </div>
             </div>            
         
-            <div class="modal fade modal_excluir_usuarios">
+            <div class="modal fade modal_excluir_podcasts">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -100,16 +90,16 @@
                             <button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <p>Tem certeza de que deseja excluir os usuários selecionados?</p>
+                            <p>Tem certeza de que deseja excluir os podcasts selecionados?</p>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-danger button_confirmacao_excluir_usuarios" type="button">Sim</button>
+                            <button class="btn btn-danger button_confirmacao_excluir_podcasts" type="button">Sim</button>
                             <button class="btn btn-primary" type="button" data-dismiss="modal">Não</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal modal-visualizar-usuario">
+            <div class="modal modal-visualizar-podcast">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -120,11 +110,9 @@
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <p class="p_email"></p>
+                                        <p class="p_rss_feed"></p>
                                         <p class="p_nome"></p>
-                                        <p class="p_idade"></p>
-                                        <p class="p_sexo"></p>
-                                        <p class="p_pais"></p>                                        
+                                        <p class="p_site"></p>                                       
                                     </div>
                                 </div>
                             </div>
@@ -140,6 +128,6 @@
 
                                                      
         <%@include file="/view/include/scripts.jsp"%>
-        <script src="${pageContext.servletContext.contextPath}/assets/js/user.js"></script>
+        <script src="${pageContext.servletContext.contextPath}/assets/js/podcast.js"></script>
     </body>
 </html>

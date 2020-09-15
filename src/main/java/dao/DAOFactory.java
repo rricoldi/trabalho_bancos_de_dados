@@ -89,6 +89,7 @@ public abstract class DAOFactory implements AutoCloseable {
     }
 
     public abstract UsuarioDAO getUsuarioDAO();
+    public abstract PodcastDAO getPodcastDAO();
 
     @Override
     public void close() throws SQLException {

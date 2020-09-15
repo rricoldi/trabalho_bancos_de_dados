@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import com.google.gson.Gson;
@@ -13,8 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,22 +15,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Usuario;
+import model.Podcast;
 
-/**
- *
- * @author renan
- */
-@WebServlet(name = "UserController", 
+@WebServlet(name = "PodcastController", 
     urlPatterns = {
-        "/user", 
-        "/user/create",
-        "/user/read",
-        "/user/update",
-        "/user/delete"
+        "/podcast",
+        "/podcast/create",
+        "/podcast/read",
+        "/podcast/update",
+        "/podcast/delete",
     }
 )
-public class UserController extends HttpServlet {
+
+public class PodcastController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,10 +46,10 @@ public class UserController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UserController</title>");            
+            out.println("<title>Servlet PodcastController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet PodcastController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -77,70 +67,71 @@ public class UserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO<Usuario> dao;
-        Usuario usuario;
-        
+        DAO<Podcast> dao;
+        Podcast podcast;
+
         RequestDispatcher dispatcher;
         
         switch(request.getServletPath()) {
-            case "/user":
+            case "/podcast":
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getUsuarioDAO();
+                    dao = daoFactory.getPodcastDAO();
 
-                    List<Usuario> usuarioList = dao.all();
-                    request.setAttribute("usuarioList", usuarioList);
+                    List<Podcast> podcastList = dao.all();
+                    request.setAttribute("podcastList", podcastList);
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
                 }
-                dispatcher = request.getRequestDispatcher("/view/user/index.jsp");
+                dispatcher = request.getRequestDispatcher("/view/podcast/index.jsp");
                 dispatcher.forward(request, response);
                 break;
                 
-            case "/user/create":
-                dispatcher = request.getRequestDispatcher("/view/user/create.jsp");
+            case "/podcast/create":
+                dispatcher = request.getRequestDispatcher("/view/podcast/create.jsp");
                 dispatcher.forward(request, response);
                 break;
             
-            case "/user/read":
+            case "/podcast/read":
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getUsuarioDAO();
+                    dao = daoFactory.getPodcastDAO();
 
-                    usuario = dao.read(request.getParameter("email"));
+                    podcast = dao.read(request.getParameter("rss_feed"));
                     
                     Gson gson = new GsonBuilder().create();
-                    String json = gson.toJson(usuario);
+                    String json = gson.toJson(podcast);
                     
                     response.getOutputStream().print(json);
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
-                    response.sendRedirect(request.getContextPath() + "/user");
+                    response.sendRedirect(request.getContextPath() + "/podcast");
                 }
                 break;
              
-            case "/user/update":
+            case "/podcast/update":
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getUsuarioDAO();
+                    dao = daoFactory.getPodcastDAO();
 
-                    usuario = dao.read(request.getParameter("email"));
-                    request.setAttribute("usuario", usuario);
+                    podcast = dao.read(request.getParameter("rss_feed"));
+                    request.setAttribute("podcast", podcast);
                     
-                    dispatcher = request.getRequestDispatcher("/view/user/update.jsp");
+                    dispatcher = request.getRequestDispatcher("/view/podcast/update.jsp");
                     dispatcher.forward(request, response);
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
-                    response.sendRedirect(request.getContextPath() + "/user");
+                    response.sendRedirect(request.getContextPath() + "/podcast");
                 }
                 break;
-            case "/user/delete":
+            case "/podcast/delete":
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getUsuarioDAO();
-                    dao.delete(request.getParameter("email"));
+                    dao = daoFactory.getPodcastDAO();
+                    dao.delete(request.getParameter("rss_feed"));
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
                 }
-                response.sendRedirect(request.getContextPath() + "/user");
+                response.sendRedirect(request.getContextPath() + "/podcast");
                 break;
         }
+
     }
 
     /**
@@ -154,47 +145,43 @@ public class UserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                
-        DAO<Usuario> dao;
-        Usuario usuario = new Usuario();
+        DAO<Podcast> dao;
+        Podcast podcast = new Podcast();
         
         HttpSession session = request.getSession();
         
         String servletPath = request.getServletPath();
         
         switch(request.getServletPath()) {                
-            case "/user/create":
-            case "/user/update":
-                usuario.setEmail(request.getParameter("email"));
-                usuario.setSenha(request.getParameter("senha"));
-                usuario.setNome(request.getParameter("nome"));
-                usuario.setIdade(Integer.parseInt(request.getParameter("idade")));
-                usuario.setSexo(request.getParameter("sexo"));
-                usuario.setPais(request.getParameter("pais"));       
+            case "/podcast/create":
+            case "/podcast/update":
+                podcast.setRss_feed(request.getParameter("rss_feed"));
+                podcast.setNome(request.getParameter("nome"));
+                podcast.setSite(request.getParameter("site"));
                 
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getUsuarioDAO();
-                    if(servletPath.equals("/user/create")) {
-                        dao.create(usuario);                        
+                    dao = daoFactory.getPodcastDAO();
+                    if(servletPath.equals("/podcast/create")) {
+                        dao.create(podcast);                        
                     } else {
-                        dao.update(usuario);
+                        dao.update(podcast);
                     }
-                    response.sendRedirect(request.getContextPath() + "/user");
+                    response.sendRedirect(request.getContextPath() + "/podcast");
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
                     response.sendRedirect(request.getContextPath() + servletPath);
                 }
                 break;
-            case "/user/delete":
-                String usuarios[] = request.getParameterValues("delete");
+            case "/podcast/delete":
+                String podcasts[] = request.getParameterValues("delete");
                 
                 try ( DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getUsuarioDAO();
+                    dao = daoFactory.getPodcastDAO();
                     try {
                         daoFactory.beginTransaction();
                         
-                        for(String usuarioEmail : usuarios) {
-                            dao.delete(usuarioEmail);
+                        for(String podcastRss_feed : podcasts) {
+                            dao.delete(podcastRss_feed);
                         }
                         
                         daoFactory.commitTransaction();
@@ -206,7 +193,7 @@ public class UserController extends HttpServlet {
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
                 }
-                response.sendRedirect(request.getContextPath() + "/user");
+                response.sendRedirect(request.getContextPath() + "/podcast");
                 break;
         }
     }

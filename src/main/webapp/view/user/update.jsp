@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib tagdir="/WEB-INF/tags/session" prefix="session"%>
+<session:my_user context="${pageContext.servletContext.contextPath}"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,7 +11,7 @@
     <body>
 
         <div class="container">
-            <h2 class="text-center">Atualização dos dados do usuário <c:out value="${usario.nome}"/></h2>
+            <h2 class="text-center">Atualização dos dados do usuário <c:out value="${usuario.nome}"/></h2>
 
             <form
                 class="form"

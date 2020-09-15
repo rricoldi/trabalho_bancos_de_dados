@@ -1,9 +1,14 @@
 C:\Users\renan\bd\trabalho\src\main\java\dao\DAO.java
+C:\Users\renan\bd\trabalho\src\main\java\model\Podcast.java
+C:\Users\renan\bd\trabalho\src\main\java\dao\PodcastDAO.java
 C:\Users\renan\bd\trabalho\src\main\java\dao\DAOFactory.java
 C:\Users\renan\bd\trabalho\src\main\java\jdbc\ConnectionFactory.java
 C:\Users\renan\bd\trabalho\src\main\java\jdbc\PgConnectionFactory.java
+C:\Users\renan\bd\trabalho\src\main\java\dao\UsuarioDAO.java
+C:\Users\renan\bd\trabalho\src\main\java\dao\PgPodcastDAO.java
+C:\Users\renan\bd\trabalho\src\main\java\controller\UserLoginController.java
 C:\Users\renan\bd\trabalho\src\main\java\model\Usuario.java
 C:\Users\renan\bd\trabalho\src\main\java\controller\UserController.java
 C:\Users\renan\bd\trabalho\src\main\java\dao\PgUsuarioDAO.java
-C:\Users\renan\bd\trabalho\src\main\java\dao\UsuarioDAO.java
 C:\Users\renan\bd\trabalho\src\main\java\dao\PgDAOFactory.java
+C:\Users\renan\bd\trabalho\src\main\java\controller\PodcastController.java

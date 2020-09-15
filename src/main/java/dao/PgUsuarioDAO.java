@@ -46,11 +46,6 @@ public class PgUsuarioDAO implements UsuarioDAO {
                                 "SELECT nome, idade, sexo, pais " +
                                 "FROM trabalho.usuario " +
                                 "WHERE email = ? AND senha = md5(?);";
-    
-    private static final String GET_BY_EMAIL_QUERY =
-                                "SELECT senha, nome, idade, sexo, pais " +
-                                "FROM trabalho.usuario " +
-                                "WHERE email = ?;";
 
     public PgUsuarioDAO(Connection connection) {
         this.connection = connection;
@@ -71,7 +66,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
             if (ex.getMessage().contains("uq_user_login")) {
-                throw new SQLException("Erro ao inserir usuário: login já existente.");
+                throw new SQLException("Erro ao inserir usuário: e-mail já existente.");
             } else if (ex.getMessage().contains("not-null")) {
                 throw new SQLException("Erro ao inserir usuário: pelo menos um campo está em branco.");
             } else {
@@ -198,5 +193,24 @@ public class PgUsuarioDAO implements UsuarioDAO {
     
     @Override
     public void authenticate(Usuario usuario) throws SQLException, SecurityException {
+        try (PreparedStatement statement = connection.prepareStatement(AUTHENTICATE_QUERY)) {
+            statement.setString(1, usuario.getEmail());
+            statement.setString(2, usuario.getSenha());
+
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    usuario.setNome(result.getString("nome"));
+                    usuario.setIdade(result.getInt("idade"));
+                    usuario.setSexo(result.getString("sexo"));
+                    usuario.setPais(result.getString("pais"));
+                } else {
+                    throw new SecurityException("Email ou senha incorretos.");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            throw new SQLException("Erro ao autenticar usuário.");
+        }
     }
 }
