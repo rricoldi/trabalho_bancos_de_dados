@@ -26,9 +26,9 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="col-lg-6 h4">Nome</th>
-                            <th class="col-sm-5 h4 text-center">Ação</th>
-                            <th class="col-sm-1 h4 text-center">Excluir?</th>
+                            <th class="col-lg-4 h4">Nome</th>
+                            <th class="col-lg-1 h4 text-center">Ação</th>
+                            <th class="col-lg-1 h4 text-center">Excluir?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,6 +53,18 @@
                                             data-toggle="tooltip"
                                             data-original-title="Excluir">
                                              <i class="fa fa-trash"></i>
+                                        </a>
+                                        <a class="btn btn-default link_inscrever_podcast"
+                                            href="${pageContext.servletContext.contextPath}/inscricao/create?rss_feed=${podcast.rss_feed}&email=${usuario.email}"
+                                            data-toggle="tooltip"
+                                            data-original-title="Inscrever">
+                                             <i class="fa fa-plus-circle"></i>
+                                        </a>
+                                        <a class="btn btn-default link_inscrever_podcast"
+                                            href="${pageContext.servletContext.contextPath}/comentario/create?rss_feed=${podcast.rss_feed}&email=${usuario.email}"
+                                            data-toggle="tooltip"
+                                            data-original-title="Comentar">
+                                             <i class="fa fa-pencil"></i>
                                         </a>
                                     </div>
                                 </td>
