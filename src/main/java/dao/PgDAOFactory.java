@@ -23,8 +23,13 @@ public class PgDAOFactory extends DAOFactory{
         return new PgInscricaoDAO(this.connection);
     }
     
-     @Override
+    @Override
     public ComentarioDAO getComentarioDAO() {
         return new PgComentarioDAO(this.connection);
+    }
+    
+    @Override
+    public TagDAO getTagDAO() {
+        return new PgTagDAO(this.connection);
     }
 }

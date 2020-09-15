@@ -54,13 +54,13 @@
                                             data-original-title="Excluir">
                                              <i class="fa fa-trash"></i>
                                         </a>
-                                        <a class="btn btn-default link_inscrever_podcast"
-                                            href="${pageContext.servletContext.contextPath}/inscricao/create?rss_feed=${podcast.rss_feed}&email=${usuario.email}"
+                                        <a class="btn btn-default link_adicionar_tag"
+                                            href="${pageContext.servletContext.contextPath}/tag/create?rss_feed=${podcast.rss_feed}"
                                             data-toggle="tooltip"
-                                            data-original-title="Inscrever">
+                                            data-original-title="Adicionar Tag">
                                              <i class="fa fa-plus-circle"></i>
                                         </a>
-                                        <a class="btn btn-default link_inscrever_podcast"
+                                        <a class="btn btn-default link_comentar_podcast"
                                             href="${pageContext.servletContext.contextPath}/comentario/create?rss_feed=${podcast.rss_feed}&email=${usuario.email}"
                                             data-toggle="tooltip"
                                             data-original-title="Comentar">
