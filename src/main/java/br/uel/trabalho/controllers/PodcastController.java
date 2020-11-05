@@ -31,11 +31,14 @@ public class PodcastController {
 
 		try {
 			lista = podcastRepository.findAll();
+			if(lista == null) {
+                throw new Exception("Null");
+            }
 			response.put("podcasts", lista);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");
-			response.put("status", "Nenhum Podcast encontrado.");
+			response.put("status", "No Podcasts found.");
 		}
 		
 		return lista;
@@ -47,12 +50,15 @@ public class PodcastController {
 		JSONObject response = new JSONObject();
 		try {
 			podcast = podcastRepository.find(id);
+			if(podcast == null) {
+                throw new Exception("Null");
+            }
 			response.put("code", "200");
 			response.put("podcast", podcast);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");
-			response.put("status", "Nenhum Podcast encontrado com este id.");
+			response.put("status", "Podcast not found with the provided id.");
 		}
 		return response;
 	}
@@ -74,7 +80,7 @@ public class PodcastController {
 				response.put("code", "201");
 				response.put("created", created);
 			} else {
-				response.put("status", "Podcast Created Wrong.");
+				response.put("status", "Podcast created wrong.");
 				response.put("code", "400");
 			}
 			
@@ -82,7 +88,7 @@ public class PodcastController {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 
-			response.put("status", "Podcast Create Failed.");
+			response.put("status", "Podcast create failed.");
 			response.put("code", "400");
 			
 			return response;
@@ -93,7 +99,6 @@ public class PodcastController {
 	public JSONObject updatePodcast(@RequestBody Podcast podcast, @PathVariable("id") String id) {
 		JSONObject response = new JSONObject();
 		Podcast updated;
-		logger.info(podcast.getNome());
 
 		try {
 			if(podcast.getEmail() == null) {
@@ -105,7 +110,7 @@ public class PodcastController {
 				response.put("code", "200");
 				response.put("updated", updated);
 			} else {
-				response.put("status", "Podcast Updated Wrong.");
+				response.put("status", "Podcast updated wrong.");
 				response.put("code", "400");
 			}
 			
@@ -113,13 +118,14 @@ public class PodcastController {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 
-			response.put("status", "Podcast Update Failed.");
+			response.put("status", "Podcast update failed.");
 				response.put("code", "200");
 			response.put("code", "400");
 			
 			return response;
 		}
 	}
+	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public JSONObject deletePodcast(@PathVariable("id") String id) {
 		JSONObject response = new JSONObject();
@@ -132,7 +138,7 @@ public class PodcastController {
 				response.put("code", "200");
 				response.put("deleted", deleted);
 			} else {
-				response.put("status", "Podcast not found.");
+				response.put("status", "Podcast not found with the provided id.");
 				response.put("code", "404");
 			}
 
@@ -140,7 +146,7 @@ public class PodcastController {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 
-			response.put("status", "Podcast Delete Failed.");
+			response.put("status", "Podcast delete failed.");
 			response.put("code", "400");
 			
 			return response;
@@ -162,11 +168,10 @@ public class PodcastController {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 
-			response.put("status", "Podcast Delete Failed.");
+			response.put("status", "Podcast delete failed.");
 			response.put("code", "400");
 			
 			return response;
 		}
 	}
-
 }
