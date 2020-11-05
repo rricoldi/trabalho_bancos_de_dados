@@ -31,4 +31,4 @@ Um usuário acessa o site, e caso não esteja logado aparece as opções de cada
 <img src="https://i.imgur.com/rgFnvJ4.png" width="800">
 
 ## 📑 Modelo Relacional
-<img src="https://i.imgur.com/jCQafQc.jpg" width="800">
+<img src="https://i.imgur.com/Vsy3j8W.jpg" width="800">
