@@ -2,17 +2,14 @@ package br.uel.trabalho.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.uel.trabalho.model.*;
@@ -27,47 +24,58 @@ public class PodcastController {
 
 	org.slf4j.Logger logger = LoggerFactory.getLogger(PodcastController.class);
 
-	@GetMapping("/")
+	@RequestMapping(value="/", method=RequestMethod.GET)
 	public List<Podcast> listPodcasts() {
 		List<Podcast> lista = new ArrayList<>();
+		JSONObject response = new JSONObject();
+
 		try {
 			lista = podcastRepository.findAll();
+			response.put("podcasts", lista);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
+			response.put("code", "400");
+			response.put("status", "Nenhum Podcast encontrado.");
 		}
 		
 		return lista;
 	}
 
-	@GetMapping("/find")
-	@ResponseBody
-	public JSONObject findPodcast(@RequestParam(required = true) String rss_feed) { 
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public JSONObject findPodcast(@PathVariable("id") String id) { 
 		Podcast podcast;
 		JSONObject response = new JSONObject();
 		try {
-			podcast = podcastRepository.find(rss_feed);
-			response.put("rss_feed", rss_feed);
-			response.put("nome", podcast.getNome());
-			response.put("site", podcast.getSite());
+			podcast = podcastRepository.find(id);
+			response.put("code", "200");
+			response.put("podcast", podcast);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
-			response.put("status", "Nenhum Podcast encontrado com este rss_feed.");
+			response.put("code", "400");
+			response.put("status", "Nenhum Podcast encontrado com este id.");
 		}
 		return response;
 	}
 
-	@PostMapping("/")
+	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createPodcast(@RequestBody Podcast podcast) {
 		JSONObject response = new JSONObject();
 		Podcast created;
-		logger.info(podcast.getNome());
+
+		UUID uuid = UUID.randomUUID();
 
 		try {
-			created = podcastRepository.save(podcast.getRss_feed(), podcast.getNome(), podcast.getSite());
+			if(podcast.getEmail() == null) {
+				created = podcastRepository.saveNoEmail(uuid.toString(), podcast.getRss_feed(), podcast.getNome(), podcast.getSite());
+			} else {
+				created = podcastRepository.save(uuid.toString(), podcast.getRss_feed(), podcast.getNome(), podcast.getSite(), podcast.getEmail());
+			}
 			if(created.getNome().equals(podcast.getNome())) {
-				response.put("status", "Podcast Created.");
+				response.put("code", "201");
+				response.put("created", created);
 			} else {
 				response.put("status", "Podcast Created Wrong.");
+				response.put("code", "400");
 			}
 			
 			return response;
@@ -75,23 +83,30 @@ public class PodcastController {
 			logger.error(e.getMessage());
 
 			response.put("status", "Podcast Create Failed.");
+			response.put("code", "400");
 			
 			return response;
 		}
 	}
 
-	@PutMapping("/update")
-	public JSONObject updatePodcast(@RequestBody Podcast podcast, @RequestParam(required = true) String rss_feed) {
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public JSONObject updatePodcast(@RequestBody Podcast podcast, @PathVariable("id") String id) {
 		JSONObject response = new JSONObject();
 		Podcast updated;
 		logger.info(podcast.getNome());
 
 		try {
-			updated = podcastRepository.update(rss_feed, podcast.getRss_feed(), podcast.getNome(), podcast.getSite());
+			if(podcast.getEmail() == null) {
+				updated = podcastRepository.updateNoEmail(id, podcast.getRss_feed(), podcast.getNome(), podcast.getSite());
+			} else {
+				updated = podcastRepository.update(id, podcast.getRss_feed(), podcast.getNome(), podcast.getSite(), podcast.getEmail());
+			}
 			if(updated.getNome().equals(podcast.getNome())) {
-				response.put("status", "Podcast Updated.");
+				response.put("code", "200");
+				response.put("updated", updated);
 			} else {
 				response.put("status", "Podcast Updated Wrong.");
+				response.put("code", "400");
 			}
 			
 			return response;
@@ -99,23 +114,26 @@ public class PodcastController {
 			logger.error(e.getMessage());
 
 			response.put("status", "Podcast Update Failed.");
+				response.put("code", "200");
+			response.put("code", "400");
 			
 			return response;
 		}
 	}
-
-	@DeleteMapping("/delete")
-	public JSONObject deletePodcast(@RequestParam(required = true) String rss_feed) {
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public JSONObject deletePodcast(@PathVariable("id") String id) {
 		JSONObject response = new JSONObject();
 		Podcast deleted;
 
 		try {
-			deleted = podcastRepository.delete(rss_feed);
+			deleted = podcastRepository.delete(id);
 			
 			if(deleted != null) {
-				response.put("status", "Podcast Deleted.");
+				response.put("code", "200");
+				response.put("deleted", deleted);
 			} else {
 				response.put("status", "Podcast not found.");
+				response.put("code", "404");
 			}
 
 			return response;
@@ -123,6 +141,29 @@ public class PodcastController {
 			logger.error(e.getMessage());
 
 			response.put("status", "Podcast Delete Failed.");
+			response.put("code", "400");
+			
+			return response;
+		}
+	}
+
+	@RequestMapping(value="/", method=RequestMethod.DELETE)
+	public JSONObject deleteAllPodcasts() {
+		JSONObject response = new JSONObject();
+		List<Podcast> deleteds;
+
+		try {
+			deleteds = podcastRepository.deleteAllPodcasts();
+				
+			response.put("code", "200");
+			response.put("deleted", deleteds);
+
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("status", "Podcast Delete Failed.");
+			response.put("code", "400");
 			
 			return response;
 		}

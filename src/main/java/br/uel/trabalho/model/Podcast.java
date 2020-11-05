@@ -8,9 +8,19 @@ import javax.persistence.Table;
 @Table(name = "podcast")
 public class Podcast {
     @Id
+    String id;
     String rss_feed;
     String nome;
     String site;
+    String email;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getRss_feed() {
         return rss_feed;
@@ -34,6 +44,14 @@ public class Podcast {
 
     public void setSite(String site) {
         this.site = site;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
     
 }
