@@ -128,7 +128,6 @@ public class PodcastController {
 			logger.error(e.getMessage());
 
 			response.put("status", "Podcast update failed.");
-				response.put("code", "200");
 			response.put("code", "400");
 			
 			return response;

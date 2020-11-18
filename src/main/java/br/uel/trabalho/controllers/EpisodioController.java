@@ -98,7 +98,6 @@ public class EpisodioController {
 			logger.error(e.getMessage());
 
 			response.put("status", "Episode update failed.");
-				response.put("code", "200");
 			response.put("code", "400");
 			
 			return response;

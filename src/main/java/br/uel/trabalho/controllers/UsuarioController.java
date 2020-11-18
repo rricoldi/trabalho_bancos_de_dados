@@ -115,7 +115,6 @@ public class UsuarioController {
 			logger.error(e.getMessage());
 
 			response.put("status", "User update failed.");
-				response.put("code", "200");
 			response.put("code", "400");
 			
 			return response;
