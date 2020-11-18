@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import br.uel.trabalho.model.Usuario;
+import br.uel.trabalho.models.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, String>  {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.uel.trabalho.model.Usuario;
+import br.uel.trabalho.models.Usuario;
 import br.uel.trabalho.repositories.UsuarioRepository;
 import net.minidev.json.JSONObject;
 
@@ -78,7 +78,7 @@ public class UsuarioController {
 				response.put("code", "201");
 				response.put("created", created);
 			} else {
-				response.put("status", "Usuario Created Wrong.");
+				response.put("status", "User Created Wrong.");
 				response.put("code", "400");
 			}
 			
@@ -86,7 +86,7 @@ public class UsuarioController {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 
-			response.put("status", "Usuario Create Failed.");
+			response.put("status", "User Create Failed.");
 			response.put("code", "400");
 			
 			return response;
