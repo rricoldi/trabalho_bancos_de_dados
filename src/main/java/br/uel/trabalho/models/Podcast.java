@@ -1,4 +1,4 @@
-package br.uel.trabalho.model;
+package br.uel.trabalho.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

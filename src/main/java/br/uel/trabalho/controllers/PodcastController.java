@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.XML;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import br.uel.trabalho.model.*;
-import br.uel.trabalho.repositories.PodcastRepository;
 import net.minidev.json.JSONObject;
+
+import br.uel.trabalho.models.*;
+import br.uel.trabalho.repositories.PodcastRepository;
+import br.uel.trabalho.services.RestService;
 
 @RestController
 @RequestMapping("/podcast")
@@ -23,6 +26,7 @@ public class PodcastController {
 	PodcastRepository podcastRepository;
 
 	org.slf4j.Logger logger = LoggerFactory.getLogger(PodcastController.class);
+	RestService restService = new RestService();
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public List<Podcast> listPodcasts() {
@@ -68,6 +72,7 @@ public class PodcastController {
 		JSONObject response = new JSONObject();
 		Podcast created;
 
+
 		UUID uuid = UUID.randomUUID();
 
 		try {
@@ -76,9 +81,13 @@ public class PodcastController {
 			} else {
 				created = podcastRepository.save(uuid.toString(), podcast.getRss_feed(), podcast.getNome(), podcast.getSite(), podcast.getEmail());
 			}
+			
+			org.json.JSONObject episodes = XML.toJSONObject(restService.getPodcastXML(created.getRss_feed()));
+
 			if(created.getNome().equals(podcast.getNome())) {
 				response.put("code", "201");
 				response.put("created", created);
+				response.put("episodes", new JSONParser(episodes.toString()));
 			} else {
 				response.put("status", "Podcast created wrong.");
 				response.put("code", "400");
