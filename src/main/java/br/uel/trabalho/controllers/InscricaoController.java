@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.uel.trabalho.models.UsuarioInscritoPodcast;
-import br.uel.trabalho.repositories.UsuarioInscritoPodcastRepository;
+import br.uel.trabalho.models.Inscricao;
+import br.uel.trabalho.repositories.InscricaoRepository;
 import net.minidev.json.JSONObject;
 
 @RestController
 @RequestMapping("/inscrever")
-public class UsuarioInscritoPodcastController {
+public class InscricaoController {
     @Autowired
-	UsuarioInscritoPodcastRepository usuarioInscritoPodcastRepository;
-    org.slf4j.Logger logger = LoggerFactory.getLogger(UsuarioInscritoPodcastController.class);
+	InscricaoRepository usuarioInscritoPodcastRepository;
+    org.slf4j.Logger logger = LoggerFactory.getLogger(Inscricao.class);
 
     @RequestMapping(value="/", method=RequestMethod.GET)
-	public List<UsuarioInscritoPodcast> listTags() {
-		List<UsuarioInscritoPodcast> lista = new ArrayList<>();
+	public List<Inscricao> listTags() {
+		List<Inscricao> lista = new ArrayList<>();
 		JSONObject response = new JSONObject();
 
 		try {
@@ -44,7 +44,7 @@ public class UsuarioInscritoPodcastController {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public JSONObject findTag(@PathVariable("id") String id) {
-		List<UsuarioInscritoPodcast> subscription;
+		List<Inscricao> subscription;
 		JSONObject response = new JSONObject();
 		try {
             subscription = usuarioInscritoPodcastRepository.find(id);
@@ -62,9 +62,9 @@ public class UsuarioInscritoPodcastController {
 	}
 
     @RequestMapping(value="/", method=RequestMethod.POST)
-	public JSONObject createTag(@RequestBody UsuarioInscritoPodcast subscription) {
+	public JSONObject createTag(@RequestBody Inscricao subscription) {
 		JSONObject response = new JSONObject();
-        UsuarioInscritoPodcast created;
+        Inscricao created;
         
 		try {
             created = usuarioInscritoPodcastRepository.save(subscription.getPod_id(), subscription.getUsr_id(), subscription.getClassificacao());
@@ -88,9 +88,9 @@ public class UsuarioInscritoPodcastController {
     }
 
 	@RequestMapping(value="/{id}/{pod_id}", method=RequestMethod.PUT)
-	public JSONObject likeTag(@PathVariable("id") String id, @PathVariable("pod_id") String pod_id, @RequestBody UsuarioInscritoPodcast newSub) {
+	public JSONObject likeTag(@PathVariable("id") String id, @PathVariable("pod_id") String pod_id, @RequestBody Inscricao newSub) {
 		JSONObject response = new JSONObject();
-		UsuarioInscritoPodcast updated;
+		Inscricao updated;
 
 		try {
 			updated = usuarioInscritoPodcastRepository.update(pod_id, id, newSub.getClassificacao());
@@ -113,7 +113,7 @@ public class UsuarioInscritoPodcastController {
 	@RequestMapping(value="/{id}/{pod_id}", method=RequestMethod.DELETE)
 	public JSONObject deleteTag(@PathVariable("id") String id, @PathVariable("pod_id") String pod_id) {
 		JSONObject response = new JSONObject();
-		UsuarioInscritoPodcast deleted;
+		Inscricao deleted;
 
 		try {
 			deleted = usuarioInscritoPodcastRepository.delete(pod_id, id);

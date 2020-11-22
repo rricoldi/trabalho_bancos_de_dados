@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "usuario_esta_inscrito_no_podcast")
-public class UsuarioInscritoPodcast {
+public class Inscricao {
     @Id
     String usr_id;
 

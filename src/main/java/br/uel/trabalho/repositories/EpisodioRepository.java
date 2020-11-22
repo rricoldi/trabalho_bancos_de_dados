@@ -26,5 +26,5 @@ public interface EpisodioRepository extends JpaRepository<Episodio, String>  {
     Episodio delete(String id);
 
     @Query(value="DELETE FROM trabalho.episodio WHERE id LIKE '%' RETURNING *", nativeQuery = true)
-    List<Episodio> deleteAllUsers();
+    List<Episodio> deleteAllEpisodios();
 }

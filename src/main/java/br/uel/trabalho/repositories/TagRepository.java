@@ -26,5 +26,5 @@ public interface TagRepository extends JpaRepository<Tag, String>  {
     Tag delete(String tag, String pod_id);
 
     @Query(value="DELETE FROM trabalho.tags_podcast WHERE pod_id LIKE '%' RETURNING *", nativeQuery = true)
-    List<Tag> deleteAllUsers();
+    List<Tag> deleteAllTags();
 }
