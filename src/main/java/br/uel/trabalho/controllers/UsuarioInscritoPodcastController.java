@@ -68,7 +68,7 @@ public class UsuarioInscritoPodcastController {
         
 		try {
             created = usuarioInscritoPodcastRepository.save(subscription.getPod_id(), subscription.getUsr_id(), subscription.getClassificacao());
-			if(created.getTag().equals(subscription.getTag())) {
+			if(created.getUsr_id().equals(subscription.getUsr_id())) {
 				response.put("code", "201");
 				response.put("subscription", created);
 			} else {
@@ -94,7 +94,7 @@ public class UsuarioInscritoPodcastController {
 
 		try {
 			updated = usuarioInscritoPodcastRepository.update(pod_id, id, newSub.getClassificacao());
-			updated.setTag(newSub.getTag());
+			updated.setClassificacao(newSub.getClassificacao());
 			
 			response.put("code", "200");
 			response.put("updated", updated);

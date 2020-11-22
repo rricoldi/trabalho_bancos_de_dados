@@ -17,7 +17,7 @@ public interface UsuarioInscritoPodcastRepository extends JpaRepository<UsuarioI
     UsuarioInscritoPodcast save(String pod_id, String usr_id, int classificacao);
 
     @Query(value="SELECT * FROM trabalho.usuario_esta_inscrito_no_podcast WHERE usr_id = ?1", nativeQuery = true)
-    UsuarioInscritoPodcast find(String id);
+    List<UsuarioInscritoPodcast> find(String id);
 
     @Query(value="UPDATE trabalho.usuario_esta_inscrito_no_podcast SET classificacao = ?3 WHERE pod_id = ?1 and usr_id = ?2 RETURNING *", nativeQuery = true)
     UsuarioInscritoPodcast update(String pod_id, String usr_id, int classificacao);
