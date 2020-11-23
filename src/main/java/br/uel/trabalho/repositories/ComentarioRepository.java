@@ -22,7 +22,7 @@ public interface ComentarioRepository extends JpaRepository<Comentario, String> 
     @Query(value="UPDATE trabalho.comentarios_podcast_usuario SET pod_id = ?2, usr_id = ?3, comentario = ?4 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Comentario update(String id, String pod_id, String usr_id, String comentario);
 
-    @Query(value="DELETE FROM trabalho.comentarios_podcast_usuario WHERE WHERE id = ?1 RETURNING *", nativeQuery = true)
+    @Query(value="DELETE FROM trabalho.comentarios_podcast_usuario WHERE id = ?1 RETURNING *", nativeQuery = true)
     Comentario delete(String id);
 
     @Query(value="DELETE FROM trabalho.comentarios_podcast_usuario WHERE id LIKE '%' RETURNING *", nativeQuery = true)

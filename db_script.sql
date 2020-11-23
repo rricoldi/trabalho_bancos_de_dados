@@ -70,7 +70,6 @@ create table trabalho.usuario_classifica_episodio(
     ep_id varchar(40),
     pod_id varchar(40),
     usr_id varchar(40),
-    curtida boolean,
     constraint pk_usuario_classifica_episodio PRIMARY KEY(pod_id, usr_id, ep_id),
     constraint fk_usuario_classifica_podcast foreign key(pod_id)
 		references trabalho.podcast(id)
