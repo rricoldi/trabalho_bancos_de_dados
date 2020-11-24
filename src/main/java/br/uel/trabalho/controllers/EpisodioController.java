@@ -76,9 +76,7 @@ public class EpisodioController {
 		}
 	}
 	
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public JSONObject likeEpisode(@PathVariable("id") String id) {
-		JSONObject response = new JSONObject();
+	public Episodio likeEpisode(String id) {
 		Episodio updated, episodio;
 
 		try {
@@ -89,18 +87,10 @@ public class EpisodioController {
 
 			updated = episodioRepository.update(episodio.getId(), episodio.getPod_id(), episodio.getCurtidas() + 1);
 			updated.setCurtidas(updated.getCurtidas() + 1);
-			
-			response.put("code", "200");
-			response.put("updated", updated);
 
-			return response;
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-
-			response.put("status", "Episode update failed.");
-			response.put("code", "400");
-			
-			return response;
+			return updated;
+		} catch(Exception e) {		
+			return null;
 		}
 	}
 	

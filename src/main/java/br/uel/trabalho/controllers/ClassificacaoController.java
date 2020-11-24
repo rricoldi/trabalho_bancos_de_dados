@@ -15,6 +15,7 @@ import br.uel.trabalho.models.*;
 import br.uel.trabalho.repositories.ClassificacaoRepository;
 import br.uel.trabalho.services.RestService;
 
+
 @RestController
 @RequestMapping("/classificacao")
 public class ClassificacaoController {
@@ -47,13 +48,17 @@ public class ClassificacaoController {
 	public JSONObject createClassificacao(@RequestBody Classificacao classificacao) {
 		JSONObject response = new JSONObject();
 		Classificacao created;
+		EpisodioController episodioController = new EpisodioController();
+		Episodio episodio;
 
 		try {
             created = classificacaoRepository.save(classificacao.getEp_id(), classificacao.getPod_id(), classificacao.getUsr_id());
-						
+			episodio = episodioController.likeEpisode(classificacao.getEp_id());
+
 			if(created.getPod_id().equals(classificacao.getPod_id())) {
 				response.put("code", "201");
 				response.put("created", created);
+				response.put("episodio", episodio);
 			} else {
 				response.put("status", "Classification created wrong.");
 				response.put("code", "400");
