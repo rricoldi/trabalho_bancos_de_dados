@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { shade } from 'polished'
 
 export const Container = styled.div`
     display: flex;
@@ -56,13 +57,65 @@ export const Title = styled.div`
 export const HeaderOption = styled.div`
 `
 
-export const PodcastCard = styled.div`
-    width: 246px;
-    height: 242px;
-    background: radial-gradient(100% 100% at 0% 0%, rgba(16, 24, 46, 0.4) 0%, rgba(201, 203, 209, 0) 100%);
-    backdrop-filter: blur(42px);
-    border: 8px solid #2B5AA0;
+export const PodcastContainer = styled.div`
+    padding: 40px 40px 40px 40px;
+`
 
+export const PodcastCard = styled.div`
+    width: 20vw;
+    height: 20vw;
+
+    background-image: url(${ props => props.about }), linear-gradient(270deg, #56525a 0%, rgba(25, 25, 26, 0) 100%);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    backdrop-filter: blur(42px);
     border-radius: 30px;
-    transform: rotate(90deg);
+    border: 5px solid #161719;
+    margin: 0 40px 0 0;
+`
+
+export const SearchContainer = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 40px 0 0;
+`
+
+export const Search = styled.form`
+    margin-top: 40px;
+    min-width: 22vw;
+    height: 3.2vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    background: #161719;
+    border-radius: 10px;
+
+    input {
+        padding: 0 0 0 1vw;
+        border-radius: 10px;
+
+        border: 0;
+        font: 20px 'DM Sans', sans-serif;
+        background: #161719;
+
+        color: #fff;
+
+        &::placeholder {
+           color: #fff;
+        }
+    }
+
+    button {
+        padding: 0 0 0 1vw;
+        border: 0;
+        background: #161719;
+
+        color: #fff;
+        transition: background-color 0.2s;
+    }
 `
