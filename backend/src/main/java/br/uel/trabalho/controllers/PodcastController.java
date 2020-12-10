@@ -17,6 +17,7 @@ import net.minidev.json.JSONObject;
 
 import br.uel.trabalho.models.*;
 import br.uel.trabalho.repositories.PodcastRepository;
+import br.uel.trabalho.repositories.TagRepository;
 import br.uel.trabalho.services.RestService;
 
 @RestController
@@ -59,6 +60,27 @@ public class PodcastController {
             }
 			response.put("code", "200");
 			response.put("podcast", podcast);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			response.put("code", "400");
+			response.put("status", "Podcast not found with the provided id.");
+		}
+		return response;
+	}
+
+	@RequestMapping(value="/keyword/{keyword}", method=RequestMethod.GET)
+	public JSONObject findPodcastByKeyword(@PathVariable("keyword") String keyword) { 
+		List<Podcast> podcasts = new ArrayList<>();
+		JSONObject response = new JSONObject();
+
+		try {
+			podcasts = podcastRepository.findByKeyword(keyword);
+			podcasts.addAll(podcastRepository.findByTag(keyword));
+			if(podcasts == null) {
+                throw new Exception("Null");
+            }
+			response.put("code", "200");
+			response.put("podcast", podcasts);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");

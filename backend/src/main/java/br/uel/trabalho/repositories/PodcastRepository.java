@@ -20,7 +20,13 @@ public interface PodcastRepository extends JpaRepository<Podcast, String> {
     Podcast saveNoEmail(String id, String rss_feed, String nome, String site);
 
     @Query(value="SELECT * FROM trabalho.podcast WHERE id = ?1", nativeQuery = true)
-    Podcast find(String id);
+	Podcast find(String id);
+
+	@Query(value="SELECT * FROM trabalho.podcast WHERE nome LIKE %?1%", nativeQuery = true)
+	List<Podcast> findByKeyword(String keyword);
+	
+	@Query(value="SELECT pc.* FROM trabalho.podcast pc JOIN trabalho.tags_podcast tp ON tp.pod_id = pc.id AND tp.tag = ?1", nativeQuery = true)
+    List<Podcast> findByTag(String tag);
 
     @Query(value="UPDATE trabalho.podcast SET rss_feed = ?2, nome = ?3, site = ?4, email = ?5 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Podcast update(String id, String new_rss_feed, String new_nome, String new_site, String new_email);
