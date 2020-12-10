@@ -88,7 +88,7 @@ create table trabalho.usuario_comenta_episodio(
     ep_id varchar(40),
     pod_id varchar(40),
     usr_id varchar(40),
-    comentario varchar(240),
+    comentario varchar(240) NOT NULL,
     constraint pk_usuario_comenta_episodio PRIMARY KEY(id),
     constraint fk_usuario_comenta_podcast foreign key(pod_id)
 		references trabalho.podcast(id)

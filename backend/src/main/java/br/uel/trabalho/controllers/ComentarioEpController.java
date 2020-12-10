@@ -66,6 +66,25 @@ public class ComentarioEpController {
 		return response;
 	}
 
+	@RequestMapping(value="/findByEpiId/{epi_id}", method=RequestMethod.GET)
+	public JSONObject findComentarioEpByEpiId(@PathVariable("epi_id") String epi_id) { 
+		List<ComentarioEp> lista = new ArrayList<>();
+		JSONObject response = new JSONObject();
+		try {
+			lista = comentarioEpRepository.findByEpi(epi_id);
+			if(lista == null) {
+                throw new Exception("Null");
+            }
+			response.put("code", "200");
+			response.put("comment", lista);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			response.put("code", "400");
+			response.put("status", "Comment not found with the provided id.");
+		}
+		return response;
+	}
+
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createComentarioEp(@RequestBody ComentarioEp comentarioEp) {
 		JSONObject response = new JSONObject();
