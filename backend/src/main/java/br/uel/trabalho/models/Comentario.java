@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "usuario_esta_inscrito_no_podcast")
+@Table(name = "comentarios_podcast_usuario")
 public class Comentario {
     @Id
     String id;
