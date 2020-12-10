@@ -47,7 +47,7 @@ public class InscricaoController {
 		List<Inscricao> subscription;
 		JSONObject response = new JSONObject();
 		try {
-            subscription = usuarioInscritoPodcastRepository.find(id);
+            subscription = usuarioInscritoPodcastRepository.findByUsuario(id);
             if(subscription == null) {
                 throw new Exception("Null");
             }

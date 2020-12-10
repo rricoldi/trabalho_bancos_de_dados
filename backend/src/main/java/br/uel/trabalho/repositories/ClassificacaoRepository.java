@@ -14,7 +14,10 @@ public interface ClassificacaoRepository extends JpaRepository<Classificacao, St
     Classificacao save(String ep_id, String pod_id, String usr_id);
 
     @Query(value="SELECT * FROM trabalho.usuario_classifica_episodio WHERE ep_id = ?1 and pod_id = ?2", nativeQuery = true)
-    List<Classificacao>  find(String ep_id, String pod_id);
+	List<Classificacao>  find(String ep_id, String pod_id);
+	
+	@Query(value="SELECT * FROM trabalho.usuario_classifica_episodio WHERE ep_id = ?1 and pod_id = ?2 and usr_id = ?3", nativeQuery = true)
+    Classificacao findByEpiPodUsr(String ep_id, String pod_id, String usr_id);
 
     @Query(value="DELETE FROM trabalho.usuario_classifica_episodio WHERE ep_id = ?1 and pod_id = ?2 and usr_id = ?3 RETURNING *", nativeQuery = true)
     Classificacao delete(String ep_id, String pod_id, String usr_id);

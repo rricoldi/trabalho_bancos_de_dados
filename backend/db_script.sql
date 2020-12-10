@@ -31,8 +31,8 @@ create table trabalho.usuario(
 
 create table trabalho.usuario_esta_inscrito_no_podcast(
 	classificacao int not null,
-    pod_id varchar(40) unique,
-    usr_id varchar(40) unique,
+    pod_id varchar(40),
+    usr_id varchar(40),
     constraint pk_usuario_podcast PRIMARY KEY(usr_id, pod_id),
     constraint fk_inscrito_podcast foreign key(pod_id)
 		references trabalho.podcast(id)

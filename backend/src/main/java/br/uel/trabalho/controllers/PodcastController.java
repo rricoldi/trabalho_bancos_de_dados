@@ -13,11 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 import br.uel.trabalho.models.*;
+import br.uel.trabalho.repositories.ClassificacaoRepository;
+import br.uel.trabalho.repositories.ComentarioEpRepository;
+import br.uel.trabalho.repositories.ComentarioRepository;
+import br.uel.trabalho.repositories.EpisodioRepository;
+import br.uel.trabalho.repositories.InscricaoRepository;
 import br.uel.trabalho.repositories.PodcastRepository;
-import br.uel.trabalho.repositories.TagRepository;
+import br.uel.trabalho.repositories.UsuarioRepository;
 import br.uel.trabalho.services.RestService;
 
 @RestController
@@ -25,6 +32,24 @@ import br.uel.trabalho.services.RestService;
 public class PodcastController {
 	@Autowired
 	PodcastRepository podcastRepository;
+
+	@Autowired
+	UsuarioRepository usuarioRep;
+
+	@Autowired
+	InscricaoRepository inscricaoRep;
+
+	@Autowired
+	ComentarioRepository comentarioRep;
+
+	@Autowired
+	EpisodioRepository episodioRep;
+
+	@Autowired
+	ComentarioEpRepository comentarioEpRep;
+
+	@Autowired
+	ClassificacaoRepository classificacaoRep;
 
 	org.slf4j.Logger logger = LoggerFactory.getLogger(PodcastController.class);
 	RestService restService = new RestService();
@@ -73,19 +98,87 @@ public class PodcastController {
 		List<Podcast> podcasts = new ArrayList<>();
 		JSONObject response = new JSONObject();
 
+		podcasts = podcastRepository.findByKeyword(keyword);
+		podcasts.addAll(podcastRepository.findByTag(keyword));
+		response.put("code", "200");
+		response.put("podcast", podcasts);
+
+		return response;
+	}
+
+	@RequestMapping(value="/statistics/{pod_id}/{usr_id}", method=RequestMethod.GET)
+	public JSONObject statistics(@PathVariable("pod_id") String pod_id, @PathVariable("usr_id") String usr_id) {
+		JSONObject response = new JSONObject();
+		Podcast podcast;
+		Usuario usuario;
+
 		try {
-			podcasts = podcastRepository.findByKeyword(keyword);
-			podcasts.addAll(podcastRepository.findByTag(keyword));
-			if(podcasts == null) {
+			podcast = podcastRepository.find(pod_id);
+			if(podcast == null) {
                 throw new Exception("Null");
             }
-			response.put("code", "200");
-			response.put("podcast", podcasts);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");
-			response.put("status", "Podcast not found with the provided id.");
+			response.put("status", "Podcast not found Podcast with the provided id = " + pod_id);
+			return response;
 		}
+		
+		try {
+			usuario = usuarioRep.find(usr_id);
+			if(usuario == null) {
+                throw new Exception("Null");
+            }
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			response.put("code", "400");
+			response.put("status", "User not found with the provided id = " + usr_id);
+			return response;
+		}
+		
+		response.put("code", "200");
+
+		response.put("id", podcast.getId());
+		response.put("feed_rss", podcast.getRss_feed());
+		response.put("nome", podcast.getNome());
+		response.put("site", podcast.getSite());
+		response.put("email", podcast.getEmail());
+		response.put("estrelas", inscricaoRep.sumEstrelasByPod(pod_id));
+		response.put("comentarios", comentarioRep.countCmtsByPod(pod_id));
+
+		Inscricao inscricao = inscricaoRep.findByUsuarioPodcast(usr_id, pod_id);
+
+		if(inscricao == null) {
+			response.put("inscrito", false);
+			response.put("estrelas_do_usuario", 0);
+		}
+		else {
+			response.put("inscrito", true);
+			response.put("estrelas_do_usuario", inscricao.getClassificacao());
+		}
+
+		List<Episodio> epis = episodioRep.findByPod(pod_id);
+		JSONArray episAJsonArr = new JSONArray();
+
+		for(Episodio epi : epis) {
+			JSONObject epiJsonObj = new JSONObject();
+
+			epiJsonObj.put("id", epi.getId());
+			epiJsonObj.put("curtidas", epi.getCurtidas());
+			epiJsonObj.put("comentarios", comentarioEpRep.countCmtByEpi(epi.getId()));
+
+			if(classificacaoRep.findByEpiPodUsr(epi.getId(), pod_id, usr_id) == null) {
+				epiJsonObj.put("usuario_curtiu", false);
+			}
+			else {
+				epiJsonObj.put("usuario_curtiu", true);
+			}
+
+			episAJsonArr.add(epiJsonObj);
+		}
+
+		response.put("episodios", episAJsonArr);
+
 		return response;
 	}
 

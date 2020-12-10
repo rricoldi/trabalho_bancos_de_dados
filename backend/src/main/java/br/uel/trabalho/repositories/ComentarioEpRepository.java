@@ -17,7 +17,10 @@ public interface ComentarioEpRepository extends JpaRepository<ComentarioEp, Stri
     ComentarioEp save(String id, String pod_id, String ep_id, String usr_id, String comentario);
 
     @Query(value="SELECT * FROM trabalho.usuario_comenta_episodio WHERE id = ?1", nativeQuery = true)
-    ComentarioEp find(String id);
+	ComentarioEp find(String id);
+	
+	@Query(value="SELECT COALESCE(COUNT(*),0) FROM trabalho.usuario_comenta_episodio WHERE ep_id = ?1", nativeQuery = true)
+    int countCmtByEpi(String epi_id);
 
     @Query(value="UPDATE trabalho.usuario_comenta_episodio SET comentario = ?2 WHERE id = ?1 RETURNING *", nativeQuery = true)
     ComentarioEp update(String id, String comentario);

@@ -17,7 +17,10 @@ public interface EpisodioRepository extends JpaRepository<Episodio, String>  {
     Episodio save(String id, String pod_id);
 
     @Query(value="SELECT * FROM trabalho.episodio WHERE id = ?1", nativeQuery = true)
-    Episodio find(String id);
+	Episodio find(String id);
+	
+	@Query(value="SELECT * FROM trabalho.episodio WHERE pod_id = ?1", nativeQuery = true)
+    List<Episodio> findByPod(String pod_id);
 
     @Query(value="UPDATE trabalho.episodio SET pod_id = ?2, curtidas = ?3 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Episodio update(String id, String pod_id, int curtidas);
