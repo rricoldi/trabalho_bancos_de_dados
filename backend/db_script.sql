@@ -42,6 +42,7 @@ create table trabalho.usuario_esta_inscrito_no_podcast(
         on update cascade on delete cascade
 );
 
+
 create table trabalho.comentarios_podcast_usuario(
     id varchar(40),
 	comentario text not null,
@@ -49,12 +50,12 @@ create table trabalho.comentarios_podcast_usuario(
     usr_id varchar(40),
     constraint pk_comentario_usuario_podcast PRIMARY KEY(id),
     constraint fk_comentario_podcast foreign key(pod_id)
-		references trabalho.usuario_esta_inscrito_no_podcast(pod_id)
+		references trabalho.podcast(id)
         on update cascade on delete cascade,
 	constraint fk_comentario_usuario foreign key(usr_id)
-		references trabalho.usuario_esta_inscrito_no_podcast(usr_id)
+		references trabalho.usuario(id)
         on update cascade on delete cascade
-);
+); 
 
 create table trabalho.episodio(
     id varchar(40),
