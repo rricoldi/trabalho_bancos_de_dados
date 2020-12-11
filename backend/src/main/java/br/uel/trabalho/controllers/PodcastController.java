@@ -197,12 +197,9 @@ public class PodcastController {
 				created = podcastRepository.save(uuid.toString(), podcast.getRss_feed(), podcast.getNome(), podcast.getSite(), podcast.getEmail());
 			}
 			
-			org.json.JSONObject episodes = XML.toJSONObject(restService.getPodcastXML(created.getRss_feed()));
-
 			if(created.getNome().equals(podcast.getNome())) {
 				response.put("code", "201");
 				response.put("created", created);
-				response.put("episodes", new JSONParser(episodes.toString()));
 			} else {
 				response.put("status", "Podcast created wrong.");
 				response.put("code", "400");
