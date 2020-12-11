@@ -13,10 +13,12 @@ const Header: React.FC<Props> = (props) => {
     if(props.logado === true) {
         return (
             <Container>
-                <Title>
-                    <img src={micImage} />
-                    <h1>Pode</h1>
-                </Title>
+                <a href="/" style={{textDecoration: 'none'}}>
+                    <Title>
+                        <img src={micImage} />
+                        <h1>Pode</h1>
+                    </Title>
+                </a>
                 <Button>
                     <a href="#">Cadastrar Podcast</a>
                     <User>
@@ -39,10 +41,12 @@ const Header: React.FC<Props> = (props) => {
     } else {
         return (
             <Container>
-                <Title>
-                    <img src={micImage} />
-                    <h1>Pode</h1>
-                </Title>
+                <a href="/" style={{textDecoration: 'none'}}>
+                    <Title>
+                        <img src={micImage} />
+                        <h1>Pode</h1>
+                    </Title>
+                </a>
                 <Button>Entrar</Button>
             </Container>
         )
