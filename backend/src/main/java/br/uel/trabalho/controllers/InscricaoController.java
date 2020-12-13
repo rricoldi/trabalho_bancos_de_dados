@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,7 @@ public class InscricaoController {
 		return lista;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public JSONObject findTag(@PathVariable("id") String id) {
 		List<Inscricao> subscription;
@@ -61,6 +63,7 @@ public class InscricaoController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createTag(@RequestBody Inscricao subscription) {
 		JSONObject response = new JSONObject();
@@ -87,6 +90,7 @@ public class InscricaoController {
 		}
     }
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/{id}/{pod_id}", method=RequestMethod.PUT)
 	public JSONObject likeTag(@PathVariable("id") String id, @PathVariable("pod_id") String pod_id, @RequestBody Inscricao newSub) {
 		JSONObject response = new JSONObject();
@@ -110,6 +114,7 @@ public class InscricaoController {
 		}
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/{id}/{pod_id}", method=RequestMethod.DELETE)
 	public JSONObject deleteTag(@PathVariable("id") String id, @PathVariable("pod_id") String pod_id) {
 		JSONObject response = new JSONObject();

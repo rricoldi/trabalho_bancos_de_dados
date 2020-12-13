@@ -8,6 +8,7 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.json.XML;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,7 @@ public class PodcastController {
 	org.slf4j.Logger logger = LoggerFactory.getLogger(PodcastController.class);
 	RestService restService = new RestService();
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public List<Podcast> listPodcasts() {
 		List<Podcast> lista = new ArrayList<>();
@@ -74,6 +76,7 @@ public class PodcastController {
 		return lista;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public JSONObject findPodcast(@PathVariable("id") String id) { 
 		Podcast podcast;
@@ -93,6 +96,7 @@ public class PodcastController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/keyword/{keyword}", method=RequestMethod.GET)
 	public JSONObject findPodcastByKeyword(@PathVariable("keyword") String keyword) { 
 		List<Podcast> podcasts = new ArrayList<>();
@@ -106,6 +110,7 @@ public class PodcastController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/statistics/{pod_id}/{usr_id}", method=RequestMethod.GET)
 	public JSONObject statistics(@PathVariable("pod_id") String pod_id, @PathVariable("usr_id") String usr_id) {
 		JSONObject response = new JSONObject();
