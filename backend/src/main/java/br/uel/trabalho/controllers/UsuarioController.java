@@ -74,6 +74,7 @@ public class UsuarioController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/pegaPodcastsInscritos/{usr_id}", method=RequestMethod.GET)
 	public JSONArray pegaPodcastsInscritos(@PathVariable("usr_id") String usr_id) {
 		JSONArray response = new JSONArray();

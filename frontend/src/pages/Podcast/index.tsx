@@ -38,7 +38,7 @@ interface Episode {
     name: string
     image?: string
     likes?: number
-    comments?:number
+    liked?: boolean
 }
 
 interface Params {
@@ -63,17 +63,28 @@ const Podcast: React.FC<Props> = () => {
                 headers:{'Content-Type': 'application/x-www-form-urlencoded'}
             })
             const json = JSON.parse(convert.xml2json(result.data, {compact: true, spaces: 4}))
+            console.log(json)
             if(logged) {
                 const additional = await api.get(`podcast/statistics/${podcastId}/${userId}`)
-                console.log(additional)
 
                 setPodcast({
                     name: Object.values(json.rss.channel.title)[0] as string,
                     description: Object.values(json.rss.channel.description)[0] as string,
                     imageUrl: Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
                     episodes: json.rss.channel.item.map( (episode: any) => {
+                        for(let i = 0; i < additional.data.episodios.length; i++) {
+                            if(additional.data.episodios[i].id == episode.guid._text) {
+                                return {
+                                    id: episode.guid._text,
+                                    name: Object.values(episode.title)[0],
+                                    image: episode['itunes:image'] ? episode['itunes:image']._attributes.href : Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
+                                    likes: additional.data.episodios[i].curtidas,
+                                    liked: additional.data.episodios[i].usuario_curtiu
+                                }
+                            }
+                        }
                         return {
-                            id: Object.values(episode.guid)[0],
+                            id: episode.guid._text,
                             name: Object.values(episode.title)[0],
                             image: episode['itunes:image'] ? episode['itunes:image']._attributes.href : Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
                         }
@@ -172,6 +183,30 @@ const Podcast: React.FC<Props> = () => {
         }
     }
 
+    const handleLike = async (episodeId: string) => {
+        if(podcast) {
+            setPodcast({
+                ...podcast,
+                episodes: podcast.episodes.map(
+                    episode => {
+                        if(episode.id === episodeId) {
+                            return {
+                                ...episode,
+                                likes: episode.liked ? episode.likes ? episode.likes-1 : 0 : episode.likes ? episode.likes+1 : 1
+                            }
+                        }
+                    }
+                ) as Episode[]
+            })
+        }
+
+        await api.post('classificacao/', {
+            usr_id: userId,
+            pod_id: podcastId,
+            ep_id: episodeId
+        })
+    }
+
     return (
         <>
             <Header/>
@@ -236,7 +271,7 @@ const Podcast: React.FC<Props> = () => {
                     {
                         podcast?.episodes.map( episode => {
                             return (
-                                <EpisodeCard key={episode.id}>
+                                <EpisodeCard key={episode.id} onClick={() => handleLike(episode.id)}>
                                     <EpisodeImageCard about={ episode?.image } />
                                     <EpisodeInfo>
                                         <h1>{ episode.name }</h1>
