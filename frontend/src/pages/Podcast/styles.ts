@@ -1,3 +1,4 @@
+import { shade } from 'polished'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -166,7 +167,6 @@ export const EpisodeInfo = styled.div`
 export const EpisodeStats = styled.div`
     display: flex;
 
-
     img {
         margin-right: 1.5vw;
         width: 1.7vw;
@@ -183,5 +183,105 @@ export const EpisodeStats = styled.div`
         color: #fff;
         font-size: 1.4vw;
         font-weight: bold;
+    }
+`
+export const CommentCard = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 40px auto;
+    max-width: 96%;
+    max-height: 60vh;
+
+    padding: 30px;
+    border-radius: 20px;
+    justify-content: space-between;
+
+    div {
+        overflow-y: scroll;
+        overflow-x: visible;
+        ::-webkit-scrollbar {
+            width: 10px;
+            border-radius: 20px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #292B2D;
+            border-radius: 20px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #161719;
+            border-radius: 20px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #212325;
+            border-radius: 20px;
+        }
+    }
+
+    background: #292B2D;
+`
+export const Comment = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 auto 40px auto;
+    width: 96%;
+
+    padding: 30px;
+    border-radius: 20px;
+
+    background: #161719;
+
+    p {
+        font-family: 'DM Sans', sans-serif;
+        color: #fff;
+        font-size: 1.4vw;
+    }
+`
+
+export const SendContainer = styled.form`
+    flex: 1;
+    width: 96%;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto 0 auto;
+
+    button {
+        padding: 0 0 0 20px;
+        border-radius: 50%;
+        width: 1.9vw;
+        height: 1.9vw;
+        border: none; /* Remove borders */
+        background: #292B2D;
+        transform: rotate(44deg);
+    }
+
+`
+
+export const Message = styled.input`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-height: 5vh;
+
+    padding: 30px;
+    border-radius: 20px;
+
+    border: 0;
+
+    font: 1.06vw 'DM Sans', sans-serif;
+    background: #161719;
+
+    color: #fff;
+
+    &::placeholder {
+        color: #fff;
     }
 `

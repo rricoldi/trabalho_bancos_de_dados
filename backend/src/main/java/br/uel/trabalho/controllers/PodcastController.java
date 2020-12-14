@@ -148,7 +148,7 @@ public class PodcastController {
 		response.put("nome", podcast.getNome());
 		response.put("site", podcast.getSite());
 		response.put("email", podcast.getEmail());
-		response.put("estrelas", inscricaoRep.sumEstrelasByPod(pod_id));
+		response.put("estrelas", inscricaoRep.avgEstrelasByPod(pod_id));
 		response.put("comentarios", comentarioRep.countCmtsByPod(pod_id));
 
 		Inscricao inscricao = inscricaoRep.findByUsuarioPodcast(usr_id, pod_id);

@@ -9,9 +9,9 @@ import AuthContext, { AuthContextData } from '../context/AuthContext'
 
 const Routes: React.FC = () => {
     const [context, setContext] = useState<AuthContextData>({
-        logged: false,
-        id: '',
-        name: '',
+        logged: true,
+        id: '4fa6b567-6871-4287-9e31-c702045fd549',
+        name: 'Renan Ricoldi',
         sex: 'male',
         podcastUrl: '',
         setData: (data: AuthContextData) => { setContext(data) }

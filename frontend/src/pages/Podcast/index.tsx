@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { FiRss, FiGlobe, FiMail, FiBarChart2, FiPlayCircle, FiPauseCircle, FiHeart } from 'react-icons/fi'
+import React, { FormEvent, useContext, useEffect, useState } from 'react'
+import { FiRss, FiGlobe, FiMail, FiBarChart2, FiPlayCircle, FiPauseCircle, FiHeart, FiSend } from 'react-icons/fi'
 import convert from 'xml-js'
 import axios from 'axios'
 import StarPicker from 'react-star-picker'
 
-import { About, Buttons, Card, Container, EpisodeCard, EpisodeImageCard, EpisodeInfo, EpisodeStats, Info, PodcastCard, Stats, Subscribe } from './styles'
+import { About, Buttons, Card, Comment, CommentCard, Container, EpisodeCard, EpisodeImageCard, EpisodeInfo, EpisodeStats, Info, Message, PodcastCard, SendContainer, Stats, Subscribe } from './styles'
 import api from '../../services/api'
 import Header from '../../Components/Header'
 import CommentImg from '../../assets/comments.png'
@@ -47,6 +47,10 @@ interface Params {
 
 const Podcast: React.FC<Props> = () => {
     const [podcast, setPodcast] = useState<Podcast>()
+    const [showComment, setShowComment] = useState(false)
+    const [comments, setComments] = useState<string[]>([])
+
+    const [message, setMessage] = useState('')
 
     const { podcastUrl, id:userId, logged } = useContext(AuthContext)
 
@@ -61,6 +65,7 @@ const Podcast: React.FC<Props> = () => {
             const json = JSON.parse(convert.xml2json(result.data, {compact: true, spaces: 4}))
             if(logged) {
                 const additional = await api.get(`podcast/statistics/${podcastId}/${userId}`)
+                console.log(additional)
 
                 setPodcast({
                     name: Object.values(json.rss.channel.title)[0] as string,
@@ -138,6 +143,35 @@ const Podcast: React.FC<Props> = () => {
         }
     }
 
+    const handleShowComment = async() => {
+        if(!showComment && comments.length == 0) {
+            const comms = await api.get(`comentario/${podcastId}`)
+            setComments(comms.data.comments.map( (comment:any) => comment.comentario ))
+        }
+        setShowComment(!showComment)
+    }
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        await api.post('comentario/', {
+            pod_id: podcastId,
+            usr_id: userId,
+            comentario: message
+        })
+
+        const newCom = comments
+        newCom.push(message)
+        setComments(newCom)
+
+        setMessage('')
+        if(podcast) {
+            setPodcast({
+                ...podcast,
+                comments: comments.length
+            })
+        }
+    }
+
     return (
         <>
             <Header/>
@@ -151,8 +185,8 @@ const Podcast: React.FC<Props> = () => {
                             <Stats>
                                 <img src={StarsImg} />
                                 <h1>{ podcast?.stars ? podcast?.stars : 0 }</h1>
-                                <img src={CommentImg} />
-                                <h1>{`${ podcast?.comments ? podcast?.comments : 0 } comentários`}</h1>
+                                <img style={{cursor: 'pointer'}} onClick={handleShowComment} src={CommentImg} />
+                                <h1 style={{cursor: 'pointer'}} onClick={handleShowComment} >{`${ podcast?.comments ? podcast?.comments : 0 } comentários`}</h1>
                             </Stats>
                             <Buttons>
                                 <a href={podcast?.site}><FiGlobe color='#fff' size='1.9vw' /></a>
@@ -175,6 +209,31 @@ const Podcast: React.FC<Props> = () => {
                         }
                     </Info>
                     {
+                        showComment ? (
+                            <CommentCard>
+                                <div>
+                                    {
+                                        comments.map(
+                                            comment => {
+                                                return (
+                                                    <Comment key={comment}>
+                                                        <p>{ comment }</p>
+                                                    </Comment>
+                                                )
+                                            }
+                                        )
+                                    }
+                                </div>
+                                <SendContainer onSubmit={(event) => handleSubmit(event)}>
+                                    <Message placeholder='Digite sua mensagem' value={message} onChange={(event) => setMessage(event.target.value)} />
+                                    <button type='submit'>
+                                        <FiSend color='#fff' size='1.9vw' />
+                                    </button>
+                                </SendContainer>
+                            </CommentCard>
+                        ) : (<></>)
+                    }
+                    {
                         podcast?.episodes.map( episode => {
                             return (
                                 <EpisodeCard key={episode.id}>
@@ -184,8 +243,6 @@ const Podcast: React.FC<Props> = () => {
                                         <EpisodeStats>
                                             <img src={HeartImg} />
                                             <h1>{ episode?.likes ? episode?.likes : 0 }</h1>
-                                            <img src={CommentImg} />
-                                            <h1>{`${ episode?.comments ? episode?.comments : 0 } comentários`}</h1>
                                         </EpisodeStats>
                                     </EpisodeInfo>
                                 </EpisodeCard>
