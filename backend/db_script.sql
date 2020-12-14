@@ -101,4 +101,44 @@ create table trabalho.usuario_comenta_episodio(
         on update cascade on delete cascade
 );
 
+/*CREATE OR REPLACE FUNCTION trabalho.geraRelatorioPodcast(_pod_id VARCHAR) RETURNS VARCHAR AS $$
+DECLARE
+	rtn JSON;
+	inscritosTotal INTEGER;
+	inscritosMale INTEGER;
+	inscritosFemale INTEGER;
+	inscritosOther INTEGER;
+BEGIN
+	inscritosTotal = (SELECT COALESCE(COUNT(*),0) FROM trabalho.usuario_esta_inscrito_no_podcast WHERE pod_id = _pod_id);
+	inscritosMale = (
+		SELECT COALESCE(COUNT(*),0) FROM trabalho.usuario_esta_inscrito_no_podcast uip
+		JOIN trabalho.usuario usr ON uip.usr_id = usr.id
+		WHERE uip.pod_id = _pod_id AND usr.sexo = 'male'
+	);
+	
+	rtn = ('{
+		   "relatorio": {
+		   		"inscritos":' || inscritosTotal || ',
+		   		"inscritosMale":' || inscritosMale || '
+			}}'
+	)::jsonb;
+	
+	RETURN rtn;
+END
+$$ LANGUAGE PLPGSQL;
+
+
+SELECT trabalho.geraRelatorioPodcast('podcast_001');
+
+CREATE OR REPLACE FUNCTION trabalho.addUsuario(_id VARCHAR, _email VARCHAR, _nome VARCHAR, _sexo VARCHAR, _idade INTEGER, _senha VARCHAR, _pais VARCHAR) AS $$
+	BEGIN
+	_senha = md5(_senha);
+	END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT trabalho.addUsuario('usr_004', 'lauuau@gmail.com', 'lucas', 'other', 21, '123456', 'BR');*/
+
+--DROP FUNCTION trabalho.addUsuario(_id VARCHAR, _email VARCHAR, _nome VARCHAR, _sexo VARCHAR, _idade INTEGER, _senha VARCHAR, _pais VARCHAR);
+
 --drop schema trabalho cascade;

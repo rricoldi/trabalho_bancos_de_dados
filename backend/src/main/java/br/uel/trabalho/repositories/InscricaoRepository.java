@@ -22,8 +22,8 @@ public interface InscricaoRepository extends JpaRepository<Inscricao, String>  {
 	@Query(value="SELECT * FROM trabalho.usuario_esta_inscrito_no_podcast WHERE usr_id = ?1 AND pod_id = ?2", nativeQuery = true)
 	Inscricao findByUsuarioPodcast(String usr_id, String pod_id);
 	
-	@Query(value="SELECT COALESCE(SUM(classificacao),0) AS estrelas FROM trabalho.usuario_esta_inscrito_no_podcast WHERE pod_id = ?1", nativeQuery = true)
-    int sumEstrelasByPod(String pod_id);
+	@Query(value="SELECT COALESCE(AVG(classificacao),0) AS estrelas FROM trabalho.usuario_esta_inscrito_no_podcast WHERE pod_id = ?1", nativeQuery = true)
+	double avgEstrelasByPod(String pod_id);
 
     @Query(value="UPDATE trabalho.usuario_esta_inscrito_no_podcast SET classificacao = ?3 WHERE pod_id = ?1 and usr_id = ?2 RETURNING *", nativeQuery = true)
     Inscricao update(String pod_id, String usr_id, int classificacao);

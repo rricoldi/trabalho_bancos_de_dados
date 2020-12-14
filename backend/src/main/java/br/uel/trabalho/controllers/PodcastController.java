@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.json.XML;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +76,7 @@ public class PodcastController {
 		return lista;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public JSONObject findPodcast(@PathVariable("id") String id) { 
 		Podcast podcast;
@@ -106,6 +109,7 @@ public class PodcastController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/statistics/{pod_id}/{usr_id}", method=RequestMethod.GET)
 	public JSONObject statistics(@PathVariable("pod_id") String pod_id, @PathVariable("usr_id") String usr_id) {
 		JSONObject response = new JSONObject();
@@ -143,7 +147,7 @@ public class PodcastController {
 		response.put("nome", podcast.getNome());
 		response.put("site", podcast.getSite());
 		response.put("email", podcast.getEmail());
-		response.put("estrelas", inscricaoRep.sumEstrelasByPod(pod_id));
+		response.put("estrelas", inscricaoRep.avgEstrelasByPod(pod_id));
 		response.put("comentarios", comentarioRep.countCmtsByPod(pod_id));
 
 		Inscricao inscricao = inscricaoRep.findByUsuarioPodcast(usr_id, pod_id);
@@ -178,6 +182,16 @@ public class PodcastController {
 		}
 
 		response.put("episodios", episAJsonArr);
+
+		return response;
+	}
+
+	@RequestMapping(value="/relatorioPodcast/{pod_id}", method=RequestMethod.GET)
+	public JSONObject relatorioPodcast(@PathVariable("pod_id") String pod_id) throws ParseException {
+		String relatorio = podcastRepository.relatorioPodcast(pod_id);
+		JSONParser jsonParser = new JSONParser(relatorio);
+		
+		JSONObject response = new JSONObject(jsonParser.parseObject());
 
 		return response;
 	}

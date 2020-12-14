@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import br.uel.trabalho.models.Podcast;
 
 @Repository
@@ -26,7 +25,13 @@ public interface PodcastRepository extends JpaRepository<Podcast, String> {
 	List<Podcast> findByKeyword(String keyword);
 	
 	@Query(value="SELECT pc.* FROM trabalho.podcast pc JOIN trabalho.tags_podcast tp ON tp.pod_id = pc.id AND tp.tag = ?1", nativeQuery = true)
-    List<Podcast> findByTag(String tag);
+	List<Podcast> findByTag(String tag);
+
+	@Query(value="SELECT p.* FROM trabalho.podcast p JOIN trabalho.usuario_esta_inscrito_no_podcast uip ON p.id = uip.pod_id WHERE uip.usr_id=?1", nativeQuery = true)
+    List<Podcast> podcastsInscritosByUsr(String usr_id);
+	
+	@Query(value="SELECT trabalho.geraRelatorioPodcast(?1);", nativeQuery = true)
+	String relatorioPodcast(String pod_id);
 
     @Query(value="UPDATE trabalho.podcast SET rss_feed = ?2, nome = ?3, site = ?4, email = ?5 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Podcast update(String id, String new_rss_feed, String new_nome, String new_site, String new_email);

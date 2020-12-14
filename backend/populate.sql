@@ -1,8 +1,8 @@
 -- USUARIOS
-INSERT INTO trabalho.usuario VALUES ('usr_001', 'luckinha45@gmail.com', 'Lucas', 'M', 21, '123456', 'BR');
-INSERT INTO trabalho.usuario VALUES ('usr_002', 'rricoldi@gmail.com', 'Renan', 'M', 21, '654321', 'BR');
-INSERT INTO trabalho.usuario VALUES ('usr_003', 'WilliamMClewis@armyspy.com', 'William M. Clewis', 'M', 30, 'ieR5yah5', 'US');
-INSERT INTO trabalho.usuario VALUES ('usr_004', 'SophiaCastroCorreia@hotmail.com', 'Sophia Castro', 'F', 25, 'Keih2voh', 'PT');
+INSERT INTO trabalho.usuario VALUES ('usr_001', 'luckinha45@gmail.com', 'Lucas', 'male', 21, '123456', 'BR');
+INSERT INTO trabalho.usuario VALUES ('usr_002', 'rricoldi@gmail.com', 'Renan', 'male', 21, '654321', 'BR');
+INSERT INTO trabalho.usuario VALUES ('usr_003', 'WilliamMClewis@armyspy.com', 'William M. Clewis', 'other', 30, 'ieR5yah5', 'US');
+INSERT INTO trabalho.usuario VALUES ('usr_004', 'SophiaCastroCorreia@hotmail.com', 'Sophia Castro', 'female', 25, 'Keih2voh', 'PT');
 
 -- PODCASTS
 INSERT INTO trabalho.podcast VALUES ('podcast_001', 'feed.nerdcast.com', 'NerdCast', 'www.nerdcast.com', 'nerdcast@gmail.com');
@@ -39,6 +39,3 @@ INSERT INTO trabalho.usuario_classifica_episodio VALUES ('epi_001', 'podcast_001
 INSERT INTO trabalho.usuario_classifica_episodio VALUES ('epi_001', 'podcast_001', 'usr_002');
 INSERT INTO trabalho.usuario_classifica_episodio VALUES ('epi_002', 'podcast_001', 'usr_001');
 INSERT INTO trabalho.usuario_classifica_episodio VALUES ('epi_003', 'podcast_002', 'usr_004');
-
-
-

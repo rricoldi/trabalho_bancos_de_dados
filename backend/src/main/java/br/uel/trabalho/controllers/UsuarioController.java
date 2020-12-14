@@ -15,14 +15,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.uel.trabalho.models.Usuario;
+import br.uel.trabalho.models.Podcast;
 import br.uel.trabalho.repositories.UsuarioRepository;
+import br.uel.trabalho.repositories.PodcastRepository;
+
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONArray;
 
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
     @Autowired
 	UsuarioRepository usuarioRepository;
+
+	@Autowired
+	PodcastRepository podcastRep;
+
     Encoder encoder = Base64.getEncoder();
     org.slf4j.Logger logger = LoggerFactory.getLogger(UsuarioController.class);
     
@@ -62,6 +70,22 @@ public class UsuarioController {
 			response.put("code", "400");
 			response.put("status", "User not found with the provided id.");
 		}
+		return response;
+	}
+
+	@RequestMapping(value="/pegaPodcastsInscritos/{usr_id}", method=RequestMethod.GET)
+	public JSONArray pegaPodcastsInscritos(@PathVariable("usr_id") String usr_id) {
+		JSONArray response = new JSONArray();
+
+		List<Podcast> podList = podcastRep.podcastsInscritosByUsr(usr_id);
+
+		for(Podcast p : podList) {
+			JSONObject podcast = new JSONObject();
+			podcast.put("id", p.getId());
+			podcast.put("rss_feed", p.getRss_feed());
+			response.add(podcast);
+		}
+
 		return response;
 	}
 
