@@ -16,6 +16,7 @@ export const Card = styled.div`
     border-radius: 30px;
     margin: 25px 0 50px 0;
     flex-direction: column;
+    padding: 0 40px;
 
     background: #212325;
 `
@@ -24,6 +25,7 @@ export const CardHeader = styled.div`
     flex: 1;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 40px;
 `
 
 export const TitleContainer = styled.div`
@@ -58,7 +60,6 @@ export const HeaderOption = styled.div`
 `
 
 export const PodcastContainer = styled.div`
-    padding: 40px 40px 40px 40px;
 `
 
 export const PodcastCard = styled.div`

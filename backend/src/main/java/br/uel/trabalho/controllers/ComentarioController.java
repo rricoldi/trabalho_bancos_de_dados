@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class ComentarioController {
 	org.slf4j.Logger logger = LoggerFactory.getLogger(ComentarioController.class);
 	RestService restService = new RestService();
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public JSONObject listComentarios() {
 		List<Comentario> lista = new ArrayList<>();
@@ -47,17 +49,19 @@ public class ComentarioController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public JSONObject findComentario(@PathVariable("id") String id) { 
-		Comentario comentario;
+		List<Comentario> lista = new ArrayList<>();
+		
 		JSONObject response = new JSONObject();
 		try {
-			comentario = comentarioRepository.find(id);
-			if(comentario == null) {
+			lista = comentarioRepository.find(id);
+			if(lista == null) {
                 throw new Exception("Null");
             }
 			response.put("code", "200");
-			response.put("comment", comentario);
+			response.put("comments", lista);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");
@@ -66,6 +70,7 @@ public class ComentarioController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createComentario(@RequestBody Comentario comentario) {
 		JSONObject response = new JSONObject();

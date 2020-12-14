@@ -43,6 +43,23 @@ export const Form = styled.form`
             }
         }
 
+        select {
+            border-radius: 10px;
+            min-width: 25vw;
+            height: 3.4vw;
+            padding: 0 0 0 1vw;
+
+            border: 0;
+            font: 1.06vw 'DM Sans', sans-serif;
+            background: #161719;
+
+            color: #fff;
+
+            &::placeholder {
+                color: #fff;
+            }
+        }
+
         h1 {
             color: #fff;
             transition: background-color 0.2s;

@@ -56,6 +56,7 @@ public class PodcastController {
 	org.slf4j.Logger logger = LoggerFactory.getLogger(PodcastController.class);
 	RestService restService = new RestService();
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public List<Podcast> listPodcasts() {
 		List<Podcast> lista = new ArrayList<>();
@@ -96,6 +97,7 @@ public class PodcastController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/keyword/{keyword}", method=RequestMethod.GET)
 	public JSONObject findPodcastByKeyword(@PathVariable("keyword") String keyword) { 
 		List<Podcast> podcasts = new ArrayList<>();
@@ -196,6 +198,7 @@ public class PodcastController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createPodcast(@RequestBody Podcast podcast) {
 		JSONObject response = new JSONObject();
@@ -211,12 +214,9 @@ public class PodcastController {
 				created = podcastRepository.save(uuid.toString(), podcast.getRss_feed(), podcast.getNome(), podcast.getSite(), podcast.getEmail());
 			}
 			
-			org.json.JSONObject episodes = XML.toJSONObject(restService.getPodcastXML(created.getRss_feed()));
-
 			if(created.getNome().equals(podcast.getNome())) {
 				response.put("code", "201");
 				response.put("created", created);
-				response.put("episodes", new JSONParser(episodes.toString()));
 			} else {
 				response.put("status", "Podcast created wrong.");
 				response.put("code", "400");

@@ -16,8 +16,8 @@ public interface ComentarioRepository extends JpaRepository<Comentario, String> 
     @Query(value="INSERT INTO trabalho.comentarios_podcast_usuario(id, pod_id, usr_id, comentario) VALUES(?1, ?2, ?3, ?4) RETURNING *", nativeQuery = true)
     Comentario save(String id, String pod_id, String usr_id, String comentario);
 
-    @Query(value="SELECT * FROM trabalho.comentarios_podcast_usuario WHERE id = ?1", nativeQuery = true)
-	Comentario find(String id);
+    @Query(value="SELECT * FROM trabalho.comentarios_podcast_usuario WHERE pod_id = ?1", nativeQuery = true)
+	List<Comentario> find(String id);
 	
 	@Query(value="SELECT COALESCE(COUNT(*),0) FROM trabalho.comentarios_podcast_usuario WHERE pod_id = ?1", nativeQuery = true)
 	int countCmtsByPod(String pod_id);

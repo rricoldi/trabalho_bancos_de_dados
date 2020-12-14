@@ -6,7 +6,7 @@ import Header from '../../Components/Header'
 const Feed: React.FC = () => {
     return (
         <>
-            <Header logado={true} nome='Renan' sexo='male'/>
+            <Header/>
             <CardContainer />
         </>
     )

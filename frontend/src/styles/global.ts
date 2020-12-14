@@ -6,11 +6,14 @@ export default createGlobalStyle`
         padding: 0;
         outline: 0;
         box-sizing: border-box;
+
     }
 
     body {
         -webkit-font-smoothing: antialiased;
         background: #161719;
+        max-width: 100%;
+        overflow-x: hidden;
     }
 
     button {
