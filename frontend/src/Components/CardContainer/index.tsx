@@ -1,102 +1,199 @@
-import React from 'react'
+import React, { FormEvent, useContext, useEffect, useState } from 'react'
+import convert from 'xml-js'
 import ScrollMenu from 'react-horizontal-scrolling-menu'
 import { FiSearch } from 'react-icons/fi'
 
+import axios from 'axios'
 import { Card, CardHeader, Container, TitleContainer, Title, HeaderOption, PodcastCard, PodcastContainer, Search, SearchContainer } from './styles'
 import heartImg from '../../assets/Heart.png'
 import headphonesImg from '../../assets/Headphones.png'
+import AuthContext from '../../context/AuthContext'
+import api from '../../services/api'
+import { Link } from 'react-router-dom'
 
 interface Podcast {
+    id: string
+    image: string
     url: string
-    key: string
 }
 
-const list: Podcast[] = [
-    { url: 'http://republicadomedo.com.br/wp-content/uploads/2017/11/Feed_itunes.jpg', key: '1' },
-    { url: 'https://hipsters.tech/wp-content/uploads/2016/07/hipsters-logo.png', key: '2' },
-    { url: 'https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_nologo/528611/528611-1602707577252-eb58a57c5336c.jpg', key: '3' },
-    { url: 'https://hipsters.tech/wp-content/uploads/2016/07/hipsters-logo.png', key: '4' },
-    { url: 'https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_nologo/528611/528611-1602707577252-eb58a57c5336c.jpg', key: '5' },
-    { url: 'http://republicadomedo.com.br/wp-content/uploads/2017/11/Feed_itunes.jpg', key: '6' },
-]
 
-
-const MenuItem = ({ url }: Podcast) => {
-    return <PodcastCard about={url}/>
-}
-
-export const Menu = (): JSX.Element[] =>
-    list.map(el => {
-        const { key, url } = el
-
-        return <MenuItem url={url} key={key} />
-    })
 
 const CardContainer: React.FC = () => {
+    const [subscribes, setSubscribes] = useState<Podcast[]>([] as Podcast[])
+    const [podcasts, setPodcasts] = useState<Podcast[]>([] as Podcast[])
+    const [search, setSearch] = useState('')
+
+    useEffect(() => {
+        const pods = async () => {
+            const result = await api.get('podcast/')
+            const final = []
+            for(let i = 0; i < result.data.length; i++) {
+                try {
+                    const a = await axios.get(`${ result.data[i].rss_feed }`, {
+                        headers:{'Content-Type': 'application/x-www-form-urlencoded'}
+                    })
+                    const json = JSON.parse(convert.xml2json(a.data, {compact: true, spaces: 4}))
+                    final.push({
+                        id: result.data[i].id,
+                        image: Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
+                        url: result.data[i].rss_feed
+                    })
+                } catch(error) {
+                    console.log(error)
+                }
+            }
+
+            setPodcasts(final)
+        }
+
+        const subs = async () => {
+            const result = await api.get(`inscrever/${auth.id}`)
+            const final = []
+            for(let i = 0; i < result.data.length; i++) {
+                const a = await axios.get(`${ result.data[i].rss_feed }`, {
+                    headers:{'Content-Type': 'application/x-www-form-urlencoded'}
+                })
+                const json = JSON.parse(convert.xml2json(a.data, {compact: true, spaces: 4}))
+                final.push({
+                    id: result.data[i].id,
+                    image: Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
+                    url: result.data[i].rss_feed
+                })
+            }
+
+            setSubscribes(final)
+        }
+
+        pods()
+        if(auth.logged === true) {
+            subs()
+        }
+
+    }, [])
+
+
+    const MenuItem = ({ id, image, url }: Podcast) => {
+        return (
+            <Link to={`/podcast/${id}`} onClick={() => auth.setData({...auth, podcastUrl: url})} >
+                <PodcastCard about={image}/>
+            </Link>
+        )
+    }
+
+    const Menu = (list: Podcast[]): JSX.Element[] =>
+        list.map(el => {
+            const { id, image, url } = el
+
+            return <MenuItem url={url} key={id} id={id} image={image} />
+        })
+
+    function handleChange(value: string,fn: React.Dispatch<React.SetStateAction<string>>) {
+        fn(value)
+    }
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if(search==='')
+            return
+        const result = await api.get(`podcast/keyword/${search}`)
+        const final = []
+        for(let i = 0; i < result.data.podcast.length; i++) {
+            try {
+                const a = await axios.get(`${ result.data.podcast[i].rss_feed }`, {
+                    headers:{'Content-Type': 'application/x-www-form-urlencoded'}
+                })
+                const json = JSON.parse(convert.xml2json(a.data, {compact: true, spaces: 4}))
+                final.push({
+                    id: result.data.podcast[i].id,
+                    image: Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
+                    url: result.data.podcast[i].rss_feed
+                })
+            } catch(error) {
+                console.log(error)
+            }
+        }
+
+        setPodcasts(final)
+    }
+
+    const auth = useContext(AuthContext)
+
     return (
         <Container>
-            <Card>
-                <CardHeader>
-                    <TitleContainer>
-                        <img src={heartImg}/>
-                        <Title>
-                            <h1>Suas Inscrições</h1>
-                            <p>Você está inscrito em XX podcasts</p>
-                        </Title>
-                    </TitleContainer>
-                    <HeaderOption/>
-                </CardHeader>
-                <PodcastContainer>
-                    <ScrollMenu
-                        alignCenter={false}
-                        clickWhenDrag={false}
-                        data={Menu()}
-                        dragging={true}
-                        transition={+0.3}
-                        translate={0}
-                        wheel={true}
-                        wrapperStyle={{
-                            overflow: 'hidden'
-                        }}
-                    />
-                </PodcastContainer>
-            </Card>
+            {
+                (auth.logged === true && subscribes.length > 0) && (
+                    <Card>
+                        <CardHeader>
+                            <TitleContainer>
+                                <img src={heartImg}/>
+                                <Title>
+                                    <h1>Suas Inscrições</h1>
+                                    <p>Você está inscrito em {subscribes.length} podcasts</p>
+                                </Title>
+                            </TitleContainer>
+                            <HeaderOption/>
+                        </CardHeader>
+                        <PodcastContainer>
+                            {
+                                subscribes[0] && (
+                                    <ScrollMenu
+                                        alignCenter={false}
+                                        clickWhenDrag={false}
+                                        data={Menu(subscribes)}
+                                        dragging={true}
+                                        transition={+0.3}
+                                        translate={0}
+                                        wheel={true}
+                                        wrapperStyle={{
+                                            overflow: 'hidden'
+                                        }}
+                                    />
+                                )
+                            }
+                        </PodcastContainer>
+                    </Card>
+                )
+            }
             <Card>
                 <CardHeader>
                     <TitleContainer>
                         <img src={headphonesImg}/>
                         <Title>
                             <h1>Feed de Podcasts</h1>
-                            <p>XX podcasts cadastrados</p>
+                            <p>{podcasts.length} podcasts cadastrados</p>
                         </Title>
                     </TitleContainer>
                     <SearchContainer>
-                        <Search>
+                        <Search onSubmit={(event) => handleSubmit(event)}>
                             <button type='submit'>
                                 <FiSearch color='#fff' size='2vw'></FiSearch>
                             </button>
-                            <input placeholder='Procurar Podcast' />
+                            <input value={search} onChange={ (event) => handleChange(event.target.value, setSearch) } placeholder='Procurar Podcast' />
                         </Search>
                     </SearchContainer>
                     <HeaderOption/>
                 </CardHeader>
-                <ScrollMenu
-                    alignCenter={false}
-                    clickWhenDrag={false}
-                    data={Menu()}
-                    dragging={true}
-                    transition={+0.3}
-                    translate={0}
-                    wheel={true}
-                    wrapperStyle={{
-                        overflow: 'hidden',
-                        padding: '40px 40px 40px 40px'
-
-                    }}
-                />
+                {
+                    podcasts[0] && (
+                        <ScrollMenu
+                            alignCenter={false}
+                            clickWhenDrag={false}
+                            data={Menu(podcasts)}
+                            dragging={true}
+                            transition={+0.3}
+                            translate={0}
+                            wheel={true}
+                            wrapperStyle={{
+                                overflow: 'hidden'
+                            }}
+                        />
+                    )
+                }
             </Card>
         </Container>
     )
+
 }
 
 export default CardContainer

@@ -42,6 +42,8 @@ export const About = styled.div`
     flex-direction: column;
     margin-left: 3vw;
     justify-content: space-between;
+    min-width: 50%;
+    max-width: 53%;
 
     color: #fff;
 
@@ -50,7 +52,7 @@ export const About = styled.div`
     padding: 1vh 0;
 
     h1 {
-        font-size: 5vw;
+        font-size: 3.5vw;
         font-weight: bold;
     }
 
@@ -89,13 +91,15 @@ export const Stats = styled.div`
 export const Buttons = styled.div`
     display: flex;
     justify-content: space-between;
-    max-width: 16vw;
+    max-width: 26vw;
 
     margin-left: 15px;
 `
 
 export const Subscribe = styled.button`
     width: 22vw;
+    max-width: 22vw;
+    min-width: 18vw;
     height: 6.8vh;
 
     background: linear-gradient(9.28deg, #1C1C1C 32.27%, #2E2E2E 68.86%);

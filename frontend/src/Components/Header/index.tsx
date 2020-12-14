@@ -1,53 +1,57 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { Button, Container, User, Title } from './styles'
 import micImage from '../../assets/Mic.png'
+import AuthContext from '../../context/AuthContext'
+import { Link } from 'react-router-dom'
 
-interface Props {
-    logado: boolean
-    sexo: 'male' | 'female' | 'other'
-    nome: string
-}
+const Header: React.FC = () => {
 
-const Header: React.FC<Props> = (props) => {
-    if(props.logado === true) {
+    const auth = useContext(AuthContext)
+
+    if(auth.logged === true) {
         return (
             <Container>
-                <a href="/" style={{textDecoration: 'none'}}>
+                <Link to='/'>
                     <Title>
                         <img src={micImage} />
                         <h1>Pode</h1>
                     </Title>
-                </a>
+                </Link>
                 <Button>
-                    <a href="#">Cadastrar Podcast</a>
+                    <Link to='/podcast/register'>Cadastrar Podcast</Link>
                     <User>
                         {
-                            props.sexo === 'male' && <p>Bem Vindo de volta</p>
+                            auth.sex === 'male' && <p>Bem Vindo de volta</p>
                         }
                         {
-                            props.sexo === 'female' && <p>Bem Vinda de volta</p>
+                            auth.sex === 'female' && <p>Bem Vinda de volta</p>
                         }
                         {
-                            props.sexo === 'other' && <p>Bem Vinde de volta</p>
+                            auth.sex === 'other' && <p>Bem Vinde de volta</p>
                         }
-                        <a href="#">{props.nome}</a>
+                        <a href="#">{auth.name}</a>
                     </User>
 
-                    <a href="#">Sair</a>
+                    <a href="/" onClick={() => { auth.setData({ ...auth, logged: false }) }}>Sair</a>
                 </Button>
             </Container>
         )
     } else {
         return (
             <Container>
-                <a href="/" style={{textDecoration: 'none'}}>
+                <Link to='/'>
                     <Title>
                         <img src={micImage} />
                         <h1>Pode</h1>
                     </Title>
-                </a>
-                <Button>Entrar</Button>
+                </Link>
+                <Button>
+                    <a></a>
+                    <a></a>
+                    <Link to='/user/register'>Cadastrar</Link>
+                    <Link to='/'>Entrar</Link>
+                </Button>
             </Container>
         )
     }

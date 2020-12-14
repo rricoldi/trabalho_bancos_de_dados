@@ -187,6 +187,7 @@ public class PodcastController {
 		return response;
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createPodcast(@RequestBody Podcast podcast) {
 		JSONObject response = new JSONObject();
