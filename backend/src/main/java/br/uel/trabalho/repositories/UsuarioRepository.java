@@ -13,8 +13,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String>  {
     @Query(value = "SELECT * FROM trabalho.usuario", nativeQuery = true)
     List<Usuario> findAll();
 
-    @Query(value="INSERT INTO trabalho.usuario(id, email, nome, sexo, idade, senha, pais) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7) RETURNING *", nativeQuery = true)
-    Usuario save(String id, String email, String nome, String sexo, int idade, String senha, String pais);
+	@Query(value="INSERT INTO trabalho.usuario(id, email, nome, sexo, idade, senha, pais) VALUES(?1, ?2, ?3, ?4, ?5, trabalho.hashPassword(?6), ?7) RETURNING *", nativeQuery = true)
+	Usuario save(String id, String email, String nome, String sexo, int idade, String senha, String pais);
 
     @Query(value="SELECT * FROM trabalho.usuario WHERE id = ?1", nativeQuery = true)
     Usuario find(String id);
