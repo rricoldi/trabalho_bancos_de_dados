@@ -101,7 +101,7 @@ create table trabalho.usuario_comenta_episodio(
         on update cascade on delete cascade
 );
 
-/*CREATE OR REPLACE FUNCTION trabalho.geraRelatorioPodcast(_pod_id VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION trabalho.geraRelatorioPodcast(_pod_id VARCHAR) RETURNS VARCHAR AS $$
 DECLARE
 	rtn JSON;
 	inscritosTotal INTEGER;
@@ -127,18 +127,10 @@ BEGIN
 END
 $$ LANGUAGE PLPGSQL;
 
-
-SELECT trabalho.geraRelatorioPodcast('podcast_001');
-
-CREATE OR REPLACE FUNCTION trabalho.addUsuario(_id VARCHAR, _email VARCHAR, _nome VARCHAR, _sexo VARCHAR, _idade INTEGER, _senha VARCHAR, _pais VARCHAR) AS $$
-	BEGIN
-	_senha = md5(_senha);
-	END;
+CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
+BEGIN
+	RETURN md5('B3G_3NCR!PT@T!0N_' || _senha || '_3ND_3NCR!PT@T!0N');
+END;
 $$ LANGUAGE plpgsql;
-
-
-SELECT trabalho.addUsuario('usr_004', 'lauuau@gmail.com', 'lucas', 'other', 21, '123456', 'BR');*/
-
---DROP FUNCTION trabalho.addUsuario(_id VARCHAR, _email VARCHAR, _nome VARCHAR, _sexo VARCHAR, _idade INTEGER, _senha VARCHAR, _pais VARCHAR);
 
 --drop schema trabalho cascade;

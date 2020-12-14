@@ -126,7 +126,7 @@ public class PodcastController {
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");
-			response.put("status", "Podcast not found Podcast with the provided id = " + pod_id);
+			response.put("status", "Podcast not found with the provided id = " + pod_id);
 			return response;
 		}
 		
