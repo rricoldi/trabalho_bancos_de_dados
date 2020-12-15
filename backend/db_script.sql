@@ -127,9 +127,36 @@ BEGIN
 END
 $$ LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
+/*CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
 BEGIN
 	RETURN md5('B3G_3NCR!PT@T!0N_' || _senha || '_3ND_3NCR!PT@T!0N');
+END
+$$ LANGUAGE PLPGSQL;*/
+
+CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
+DECLARE
+n INTEGER = 1;
+i INTEGER = 1;
+hash VARCHAR = '';
+symbols VARCHAR = '!@#$%&*_+-/';
+BEGIN
+	LOOP
+		EXIT WHEN n = (length(_senha)+1);
+		
+		hash = hash || substring(_senha, n, 1) || substring(symbols, i, 1);
+		
+		n = n + 1;
+		
+		i = i + 1;
+		IF i > length(symbols) THEN
+			i = 1;
+		END IF;
+	END LOOP;
+	
+    hash = 'B3G_3NCR!PT@T!0N_' || hash || '_3ND_3NCR!PT@T!0N';
+	RAISE NOTICE '%', hash;	
+    
+	RETURN md5(hash);
 END
 $$ LANGUAGE PLPGSQL;
 
