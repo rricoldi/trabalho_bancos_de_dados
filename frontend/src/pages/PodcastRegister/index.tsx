@@ -27,6 +27,8 @@ const Register: React.FC = () => {
         }).then((data) => {
             if(data.data.code == '201') {
                 history.push('/')
+            } else {
+                alert(data.data.status)
             }
         })
     }

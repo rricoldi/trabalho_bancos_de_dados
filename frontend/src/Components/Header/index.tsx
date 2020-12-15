@@ -50,7 +50,7 @@ const Header: React.FC = () => {
                     <a></a>
                     <a></a>
                     <Link to='/user/register'>Cadastrar</Link>
-                    <Link to='/'>Entrar</Link>
+                    <Link to='/user/login'>Entrar</Link>
                 </Button>
             </Container>
         )

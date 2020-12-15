@@ -28,14 +28,19 @@ const UserLogin: React.FC = () => {
             senha: password,
             pais: null
         }).then((data) => {
-            auth.setData({
-                ...auth,
-                id: data.data.id,
-                name: data.data.nome,
-                sex: data.data.sexo,
-                logged: true
-            })
-            history.push('/')
+            if(data.data.code === '400') {
+                alert(data.data.status)
+            } else {
+                console.log(data)
+                auth.setData({
+                    ...auth,
+                    id: data.data.id,
+                    name: data.data.nome,
+                    sex: data.data.sexo,
+                    logged: true
+                })
+                history.push('/')
+            }
         })
     }
 
@@ -47,11 +52,11 @@ const UserLogin: React.FC = () => {
                     <div>
                         <h1>E-mail</h1>
                         <input required placeholder='nome@email.com' value={email} onChange={ (event) => handleChange(event.target.value, setEmail) }></input>
-                        
+
                         <h1>Senha</h1>
                         <input type="password" onChange={ (event) => handleChange(event.target.value, setPassword) } pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
                     </div>
-                    
+
                     <button type='submit'>
                         Login
                     </button>

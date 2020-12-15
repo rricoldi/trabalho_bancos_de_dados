@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { shade } from 'polished'
 
 export const Card = styled.div`
-    width: 80vw;
+    width: 40vw;
     height: 60vh;
     border-radius: 30px;
     margin: 10vh auto;
@@ -21,8 +21,11 @@ export const Form = styled.form`
     height: 100%;
 
     div {
+        flex-direction: column;
         display: flex;
-        width: 100%;
+        height: 100%;
+        width: 80%;
+        padding-bottom: 8vh;
         justify-content: space-between;
         align-items: center;
 
