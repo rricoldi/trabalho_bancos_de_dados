@@ -130,7 +130,7 @@ $$ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
 BEGIN
 	RETURN md5('B3G_3NCR!PT@T!0N_' || _senha || '_3ND_3NCR!PT@T!0N');
-END;
-$$ LANGUAGE plpgsql;
+END
+$$ LANGUAGE PLPGSQL;
 
 --drop schema trabalho cascade;

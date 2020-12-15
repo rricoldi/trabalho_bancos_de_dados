@@ -99,7 +99,7 @@ public class UsuarioController {
 		UUID uuid = UUID.randomUUID();
 
 		try {
-            created = usuarioRepository.save(uuid.toString(), usuario.getEmail(), usuario.getNome(), usuario.getSexo(), usuario.getIdade(), encoder.encodeToString(usuario.getSenha().getBytes()), usuario.getPais());
+            created = usuarioRepository.save(uuid.toString(), usuario.getEmail(), usuario.getNome(), usuario.getSexo(), usuario.getIdade(), usuario.getSenha(), usuario.getPais());
 			if(created.getNome().equals(usuario.getNome())) {
 				response.put("code", "201");
 				response.put("created", created);
@@ -114,6 +114,35 @@ public class UsuarioController {
 
 			response.put("status", "User Create Failed.");
 			response.put("code", "400");
+			
+			return response;
+		}
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public JSONObject login(@RequestBody Usuario usuario) {
+		JSONObject response = new JSONObject();
+		Usuario logged;
+
+		try {
+            logged = usuarioRepository.login(usuario.getEmail(), usuario.getSenha());
+			if(logged != null) {
+				response.put("code", "201");
+				response.put("id", logged.getId());
+				response.put("nome", logged.getNome());
+				response.put("sexo", logged.getSexo());
+			} else {
+				response.put("code", "400");
+				response.put("status", "User Login Wrong.");
+			}
+			
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("code", "400");
+			response.put("status", "User Loging Failed.");
 			
 			return response;
 		}

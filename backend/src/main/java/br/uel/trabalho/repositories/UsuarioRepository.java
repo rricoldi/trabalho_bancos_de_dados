@@ -17,7 +17,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String>  {
 	Usuario save(String id, String email, String nome, String sexo, int idade, String senha, String pais);
 
     @Query(value="SELECT * FROM trabalho.usuario WHERE id = ?1", nativeQuery = true)
-    Usuario find(String id);
+	Usuario find(String id);
+	
+	@Query(value="SELECT * FROM trabalho.usuario WHERE email = ?1 AND senha = trabalho.hashPassword(?2)", nativeQuery = true)
+    Usuario login(String email, String senha);
 
     @Query(value="UPDATE trabalho.usuario SET email = ?2, nome = ?3, sexo = ?4, idade = ?5, senha = ?6, pais = ?7 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Usuario update(String id, String email, String nome, String sexo, int idade, String senha, String pais);

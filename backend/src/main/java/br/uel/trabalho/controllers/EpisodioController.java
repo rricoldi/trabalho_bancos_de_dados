@@ -40,7 +40,7 @@ public class EpisodioController {
 		
 		return lista;
 	}
-	
+
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public JSONObject findEpisode(@PathVariable("id") String id) { 
 		Episodio episodio;
