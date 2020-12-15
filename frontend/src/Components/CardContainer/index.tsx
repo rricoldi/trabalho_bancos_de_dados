@@ -48,7 +48,7 @@ const CardContainer: React.FC = () => {
         }
 
         const subs = async () => {
-            const result = await api.get(`inscrever/${auth.id}`)
+            const result = await api.get(`usuario/pegaPodcastsInscritos/${auth.id}`)
             const final = []
             for(let i = 0; i < result.data.length; i++) {
                 const a = await axios.get(`${ result.data[i].rss_feed }`, {
