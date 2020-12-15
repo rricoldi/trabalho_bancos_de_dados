@@ -12,8 +12,6 @@ interface Props {
     image: string
     name: string
     audioUrl: string
-    likes: number
-    likd: boolean
 }
 
 const useAudio = (url: string) => {
@@ -41,22 +39,19 @@ const useAudio = (url: string) => {
     return [playing, toggle]
 }
 
-const Episode: React.FC<Props> = ({id, podcastId, image, name, audioUrl, likes, likd}: Props) => {
+const Episode: React.FC<Props> = ({id, podcastId, image, name, audioUrl}: Props) => {
 
     const [playing, toggle] = useAudio(audioUrl)
     const { logged, id:userId } = useContext(AuthContext)
 
-    const [liked, setLiked] = useState(likd)
+    const [liked, setLiked] = useState(false)
+    const [likes, setLikes] = useState(0)
 
     const handleLike = async () => {
 
         setLiked(!liked)
 
-        await api.post('classificacao/', {
-            usr_id: userId,
-            pod_id: podcastId,
-            ep_id:  id
-        })
+        liked ? setLikes(likes - 1) : setLikes(likes + 1)
     }
 
     return (

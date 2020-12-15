@@ -37,8 +37,6 @@ interface Episode {
     id: string
     name: string
     image?: string
-    likes?: number
-    liked?: boolean
     audio?: string
 }
 
@@ -73,18 +71,6 @@ const Podcast: React.FC<Props> = () => {
                     description: Object.values(json.rss.channel.description)[0] as string,
                     imageUrl: Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
                     episodes: json.rss.channel.item.map( (episode: any) => {
-                        for(let i = 0; i < additional.data.episodios.length; i++) {
-                            if(additional.data.episodios[i].id == episode.guid._text) {
-                                return {
-                                    id: episode.guid._text,
-                                    name: Object.values(episode.title)[0],
-                                    image: episode['itunes:image'] ? episode['itunes:image']._attributes.href : Array.isArray(json.rss.channel.image) ? Object.values(json.rss.channel.image[1].url)[0] as string : Object.values(json.rss.channel.image.url)[0] as string,
-                                    likes: additional.data.episodios[i].curtidas,
-                                    liked: additional.data.episodios[i].usuario_curtiu,
-                                    audio: episode.enclosure._attributes.url
-                                }
-                            }
-                        }
                         return {
                             id: episode.guid._text,
                             name: Object.values(episode.title)[0],
@@ -268,8 +254,6 @@ const Podcast: React.FC<Props> = () => {
                                     key={episode.id}
                                     id={episode.id}
                                     image={episode.image ? episode.image : ''}
-                                    likd={episode.liked ? episode.liked : false}
-                                    likes={episode.likes ? episode.likes : 0}
                                     name={episode.name}
                                     podcastId={podcastId}
                                     audioUrl={episode.audio ? episode.audio : ''}

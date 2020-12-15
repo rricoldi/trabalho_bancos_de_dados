@@ -21,7 +21,7 @@ const Register: React.FC = () => {
         event.preventDefault()
         await api.post('podcast/', {
             nome: name,
-            email,
+            email: email === '' ? null : email,
             site,
             rss_feed: feed
         }).then((data) => {
