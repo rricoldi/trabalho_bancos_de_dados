@@ -1,6 +1,7 @@
 package br.uel.trabalho.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import net.minidev.json.JSONObject;
 
 import br.uel.trabalho.models.*;
 import br.uel.trabalho.repositories.ClassificacaoRepository;
+import br.uel.trabalho.repositories.EpisodioRepository;
 import br.uel.trabalho.services.RestService;
 
 
@@ -22,6 +24,7 @@ import br.uel.trabalho.services.RestService;
 public class ClassificacaoController {
 	@Autowired
 	ClassificacaoRepository classificacaoRepository;
+	EpisodioRepository episodioRepository;
 
 	org.slf4j.Logger logger = LoggerFactory.getLogger(ClassificacaoController.class);
 	RestService restService = new RestService();
@@ -50,12 +53,18 @@ public class ClassificacaoController {
 	public JSONObject createClassificacao(@RequestBody Classificacao classificacao) {
 		JSONObject response = new JSONObject();
 		Classificacao created;
-		EpisodioController episodioController = new EpisodioController();
+		// EpisodioController episodioController = new EpisodioController();
 		Episodio episodio;
 
 		try {
+			//episodio = episodioController.likeEpisode(classificacao.getEp_id());
+			episodio = episodioRepository.find(classificacao.getEp_id());
+
+			if(episodio == null) {
+				episodio = episodioRepository.save(UUID.randomUUID().toString(), classificacao.getPod_id());
+			}
+
             created = classificacaoRepository.save(classificacao.getEp_id(), classificacao.getPod_id(), classificacao.getUsr_id());
-			episodio = episodioController.likeEpisode(classificacao.getEp_id());
 
 			if(created.getPod_id().equals(classificacao.getPod_id())) {
 				response.put("code", "201");

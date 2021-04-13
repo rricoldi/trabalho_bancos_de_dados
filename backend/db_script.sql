@@ -1,3 +1,5 @@
+--drop schema trabalho cascade;
+
 create schema trabalho;
 
 create table trabalho.podcast(
@@ -160,4 +162,3 @@ BEGIN
 END
 $$ LANGUAGE PLPGSQL;
 
---drop schema trabalho cascade;
