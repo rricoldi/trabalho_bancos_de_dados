@@ -122,6 +122,7 @@ public class PodcastController {
 			if(podcast == null) {
                 throw new Exception("Null");
             }
+			podcastRepository.addVizualizacao(pod_id);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");

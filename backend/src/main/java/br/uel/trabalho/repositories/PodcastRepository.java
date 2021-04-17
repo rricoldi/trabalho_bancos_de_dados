@@ -39,6 +39,9 @@ public interface PodcastRepository extends JpaRepository<Podcast, String> {
     @Query(value="UPDATE trabalho.podcast SET rss_feed = ?2, nome = ?3, site = ?4 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Podcast updateNoEmail(String id, String new_rss_feed, String new_nome, String new_site);
 
+    @Query(value="UPDATE trabalho.podcast SET vizualizacoes = vizualizacoes+1 WHERE id = ?1 RETURNING *", nativeQuery = true)
+    Podcast addVizualizacao(String id);
+
     @Query(value="DELETE FROM trabalho.podcast WHERE id = ?1 RETURNING *", nativeQuery = true)
     Podcast delete(String id);
 

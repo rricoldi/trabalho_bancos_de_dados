@@ -8,6 +8,7 @@ create table trabalho.podcast(
     nome varchar(100) not null,
     site varchar(200) not null,
   	email varchar(100),
+    --vizualizacoes integer default 0,
     constraint pk_podcast PRIMARY KEY(id)
 );
 
@@ -103,6 +104,19 @@ create table trabalho.usuario_comenta_episodio(
         on update cascade on delete cascade
 );
 
+create table trabalho.log_acesso (
+	id varchar(40),
+	pod_id varchar(40),
+	usr_id varchar(40),
+	constraint pk_log_acesso PRIMARY KEY(id),
+	constraint fk_log_acesso_pod foreign key(pod_id)
+		references trabalho.podcast(id)
+        on update cascade on delete cascade,
+	constraint fk_log_acesso_usr foreign key(usr_id)
+		references trabalho.usuario(id)
+        on update cascade on delete cascade
+);
+
 CREATE OR REPLACE FUNCTION trabalho.geraRelatorioPodcast(_pod_id VARCHAR) RETURNS VARCHAR AS $$
 DECLARE
 	rtn JSON;
@@ -128,12 +142,6 @@ BEGIN
 	RETURN rtn;
 END
 $$ LANGUAGE PLPGSQL;
-
-/*CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
-BEGIN
-	RETURN md5('B3G_3NCR!PT@T!0N_' || _senha || '_3ND_3NCR!PT@T!0N');
-END
-$$ LANGUAGE PLPGSQL;*/
 
 CREATE OR REPLACE FUNCTION trabalho.hashPassword(_senha VARCHAR) RETURNS VARCHAR AS $$
 DECLARE
@@ -161,4 +169,151 @@ BEGIN
 	RETURN md5(hash);
 END
 $$ LANGUAGE PLPGSQL;
+
+/*
+INSERT INTO trabalho.log_acesso VALUES ('log_000', 'af46a958-b921-47b6-9f87-5c4fdc68ea79', 'usr_0');
+INSERT INTO trabalho.log_acesso VALUES ('log_001', 'af46a958-b921-47b6-9f87-5c4fdc68ea79', 'usr_0');
+INSERT INTO trabalho.log_acesso VALUES ('log_002', 'af46a958-b921-47b6-9f87-5c4fdc68ea79', 'usr_0');
+INSERT INTO trabalho.log_acesso VALUES ('log_003', 'af46a958-b921-47b6-9f87-5c4fdc68ea79', 'usr_3');
+INSERT INTO trabalho.log_acesso VALUES ('log_004', '67074e68-bc2f-442b-8af2-7d328b6af6eb', 'usr_3');
+*/
+
+--Selecionar podcast mais acessado:
+CREATE OR REPLACE FUNCTION trabalho.getMostViewedPodcasts() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"acessos": [';
+	FOR f IN SELECT la.pod_id pod_id, p.nome pod_nome, COUNT(*) nAcessos FROM trabalho.log_acesso la
+	JOIN trabalho.podcast p ON la.pod_id = p.id
+	GROUP BY pod_id, pod_nome
+	ORDER BY nAcessos DESC
+	LOOP
+		rtn = rtn || 
+			'{
+				"pod_id": "'|| f.pod_id ||'",
+				"pod_nome": "'|| f.pod_nome ||'",
+				"nAcessos": '|| f.nAcessos ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
+
+-- Selecionar a media de idade de cada podcast:
+CREATE OR REPLACE FUNCTION trabalho.getMediaIdadeByPodcast() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"medias": [';
+	FOR f IN SELECT la.pod_id pod_id, p.nome pod_nome, AVG(usr.idade) avg_idade FROM trabalho.usuario usr
+		JOIN (SELECT DISTINCT usr_id, pod_id FROM trabalho.log_acesso) la ON la.usr_id = usr.id
+		JOIN trabalho.podcast p ON la.pod_id = p.id
+		GROUP BY la.pod_id, p.nome
+	LOOP
+		rtn = rtn || 
+			'{
+				"pod_id": "'|| f.pod_id ||'",
+				"pod_nome": "'|| f.pod_nome ||'",
+				"avg_idade": '|| f.avg_idade ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
+
+/*
+INSERT INTO trabalho.tags_podcast VALUES ('Legal', 'af46a958-b921-47b6-9f87-5c4fdc68ea79');
+INSERT INTO trabalho.tags_podcast VALUES ('Legal', '168c1536-4c42-4b8f-8c77-f06affefec6a');
+INSERT INTO trabalho.tags_podcast VALUES ('Legal', 'f1b92ce7-47a7-43cd-8586-4a09185cdd05');
+INSERT INTO trabalho.tags_podcast VALUES ('Coding', 'af46a958-b921-47b6-9f87-5c4fdc68ea79');
+INSERT INTO trabalho.tags_podcast VALUES ('Coding', '67074e68-bc2f-442b-8af2-7d328b6af6eb');
+INSERT INTO trabalho.tags_podcast VALUES ('Dia-a-Dia', '67074e68-bc2f-442b-8af2-7d328b6af6eb');
+INSERT INTO trabalho.tags_podcast VALUES ('Economia', 'af46a958-b921-47b6-9f87-5c4fdc68ea79');
+*/
+
+-- Selecionar tags mais acessadas
+CREATE OR REPLACE FUNCTION trabalho.getMostViewedTags() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"acessos": [';
+	FOR f IN SELECT ta.tag, COUNT(*) nAcessos FROM trabalho.log_acesso la
+		JOIN trabalho.tags_podcast ta ON la.pod_id = ta.pod_id
+		GROUP BY ta.tag
+		ORDER BY nAcessos DESC
+	LOOP
+		rtn = rtn || 
+			'{
+				"pod_id": "'|| f.tag ||'",
+				"nAcessos": '|| f.nAcessos ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
+
+-- Selecionar media de idades de cada tag
+CREATE OR REPLACE FUNCTION trabalho.getMediaIdadeByTag() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"medias": [';
+	FOR f IN 
+		SELECT subq.tag tag, AVG(subq.idade) avg_idade FROM (
+			SELECT ta.tag, usr.nome, MAX(usr.idade) idade FROM trabalho.usuario usr
+				JOIN (SELECT DISTINCT usr_id, pod_id FROM trabalho.log_acesso) la ON la.usr_id = usr.id
+				JOIN trabalho.tags_podcast ta ON la.pod_id = ta.pod_id
+				GROUP BY ta.tag, usr.nome
+		) subq
+		GROUP BY subq.tag
+	LOOP
+		rtn = rtn || 
+			'{
+				"tag": "'|| f.tag ||'",
+				"avg_idade": '|| f.avg_idade ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
+
+
+
+
+
+
+
 
