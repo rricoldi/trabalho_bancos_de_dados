@@ -217,6 +217,6 @@ export const Message = styled.input`
     color: #fff;
 
     &::placeholder {
-        color: #fff;
+        color: #b5b5b5;
     }
 `

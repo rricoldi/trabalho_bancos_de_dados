@@ -107,7 +107,7 @@ export const Search = styled.form`
         color: #fff;
 
         &::placeholder {
-           color: #fff;
+           color: #b5b5b5;
         }
     }
 

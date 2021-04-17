@@ -26,7 +26,8 @@ export const Form = styled.form`
         justify-content: space-between;
         align-items: center;
 
-        input {
+        input,
+        select {
             border-radius: 10px;
             min-width: 25vw;
             height: 3.4vw;
@@ -35,11 +36,28 @@ export const Form = styled.form`
             border: 0;
             font: 1.06vw 'DM Sans', sans-serif;
             background: #161719;
+            appearance: none;
 
             color: #fff;
 
             &::placeholder {
-                color: #fff;
+                color: #b5b5b5;
+            }
+
+            option {
+                font: 1.06vw 'DM Sans', sans-serif;
+                background: #161719;
+                border-radius: 10px;
+            }
+
+            option:hover,
+            option:checked {
+                background: #000;
+                box-shadow: 0 0 10px 100px #000 inset;
+            }
+
+            &:focus > option:checked {
+                background: #000 !important;
             }
         }
 
