@@ -42,7 +42,7 @@ export const Form = styled.form`
             color: #fff;
 
             &::placeholder {
-                color: #fff;
+                color: #b5b5b5;
             }
         }
 
@@ -59,7 +59,7 @@ export const Form = styled.form`
             color: #fff;
 
             &::placeholder {
-                color: #fff;
+                color: #b5b5b5;
             }
         }
 
