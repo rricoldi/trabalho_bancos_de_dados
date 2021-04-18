@@ -184,7 +184,7 @@ DECLARE
 	f RECORD;
 	rtn VARCHAR;
 BEGIN
-	rtn = '{"acessos": [';
+	rtn = '{"acessos": [ ';
 	FOR f IN SELECT la.pod_id pod_id, p.nome pod_nome, COUNT(*) nAcessos FROM trabalho.log_acesso la
 	JOIN trabalho.podcast p ON la.pod_id = p.id
 	GROUP BY pod_id, pod_nome
@@ -214,7 +214,7 @@ DECLARE
 	f RECORD;
 	rtn VARCHAR;
 BEGIN
-	rtn = '{"medias": [';
+	rtn = '{"medias": [ ';
 	FOR f IN SELECT la.pod_id pod_id, p.nome pod_nome, AVG(usr.idade) avg_idade FROM trabalho.usuario usr
 		JOIN (SELECT DISTINCT usr_id, pod_id FROM trabalho.log_acesso) la ON la.usr_id = usr.id
 		JOIN trabalho.podcast p ON la.pod_id = p.id
@@ -254,7 +254,7 @@ DECLARE
 	f RECORD;
 	rtn VARCHAR;
 BEGIN
-	rtn = '{"acessos": [';
+	rtn = '{"acessos": [ ';
 	FOR f IN SELECT ta.tag, COUNT(*) nAcessos FROM trabalho.log_acesso la
 		JOIN trabalho.tags_podcast ta ON la.pod_id = ta.pod_id
 		GROUP BY ta.tag
@@ -283,7 +283,7 @@ DECLARE
 	f RECORD;
 	rtn VARCHAR;
 BEGIN
-	rtn = '{"medias": [';
+	rtn = '{"medias": [ ';
 	FOR f IN 
 		SELECT subq.tag tag, AVG(subq.idade) avg_idade FROM (
 			SELECT ta.tag, usr.nome, MAX(usr.idade) idade FROM trabalho.usuario usr
@@ -309,9 +309,6 @@ BEGIN
 	RETURN rtn::jsonb;
 END
 $$ LANGUAGE PLPGSQL;
-
-
-
 
 
 
