@@ -36,7 +36,7 @@ const Register: React.FC = () => {
             })
 
             if(response.data.code == '201') {
-                await api.post('/tag', {
+                await api.post('/tag/', {
                     pod_id: response.data.created.id,
                     tag
                 })
