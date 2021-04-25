@@ -42,12 +42,21 @@ for(let i = 0; i < 600; i++) {
     const name = faker.name.firstName(gender)
     const lastName = faker.name.lastName()
     query += `INSERT INTO trabalho.usuario VALUES ('usr_${i}', '${i}_${faker.internet.email(name, lastName)}', '${name} ${lastName}', '${gender}', ${faker.datatype.number(60)}, 'password', '${faker.address.country()}');\n`
+    const ids = []
 
     for(let j = 0; j < 3; j++) {
-        const pod_id = pod_ids[faker.datatype.number(pod_ids.length-1)]
+        let index = faker.datatype.number(pod_ids.length-1)
+        while(ids.includes(index))
+            index = faker.datatype.number(pod_ids.length-1)
+        
+        ids.push(index);
+            
+        const pod_id = pod_ids[index]
         query += `INSERT INTO trabalho.usuario_esta_inscrito_no_podcast VALUES (${faker.datatype.number(5)}, '${pod_id}', 'usr_${i}');\n`
-        query += `INSERT INTO trabalho.comentarios_podcast_usuario VALUES ('comment_${i}_${j}', '${faker.lorem.sentence()}', '${pod_id}', 'usr_${i}');\n`
-        query += `INSERT INTO trabalho.log_acesso VALUES ('log_${i}_${j}', '${pod_id}', 'usr_${i}');\n`
+        for(let k = 0; k < faker.datatype.number(6)+1; k++)
+            query += `INSERT INTO trabalho.comentarios_podcast_usuario VALUES ('comment_${i}_${k}_${j}', '${faker.lorem.sentence()}', '${pod_id}', 'usr_${i}');\n`
+        for(let k = 0; k < faker.datatype.number(8)+1; k++)
+            query += `INSERT INTO trabalho.log_acesso VALUES ('log_${i}_${k}_${j}', '${pod_id}', 'usr_${i}');\n`
     }
 }
 

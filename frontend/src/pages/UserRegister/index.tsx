@@ -16,7 +16,7 @@ const UserRegister: React.FC = () => {
 
     const history = useHistory()
 
-    const auth = useContext(AuthContext)
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}')
 
     function handleChange(value: string,fn: React.Dispatch<React.SetStateAction<string>>) {
         fn(value)
@@ -32,13 +32,13 @@ const UserRegister: React.FC = () => {
             senha: password,
             pais: country
         }).then((data) => {
-            auth.setData({
+            localStorage.setItem('auth', JSON.stringify({
                 ...auth,
                 id: data.data.created.id,
                 name: data.data.created.nome,
                 sex: data.data.created.sexo,
                 logged: true
-            })
+            }))
             history.push('/')
         })
     }

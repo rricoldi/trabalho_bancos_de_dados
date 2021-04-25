@@ -23,6 +23,7 @@ const CardContainer: React.FC = () => {
     const [subscribes, setSubscribes] = useState<Podcast[]>([] as Podcast[])
     const [podcasts, setPodcasts] = useState<Podcast[]>([] as Podcast[])
     const [search, setSearch] = useState('')
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}')
 
     useEffect(() => {
         const pods = async () => {
@@ -75,7 +76,7 @@ const CardContainer: React.FC = () => {
 
     const MenuItem = ({ id, image, url }: Podcast) => {
         return (
-            <Link to={`/podcast/${id}`} onClick={() => auth.setData({...auth, podcastUrl: url})} >
+            <Link to={`/podcast/${id}`} onClick={() => localStorage.setItem('auth', JSON.stringify({...auth, podcastUrl: url}))} >
                 <PodcastCard about={image}/>
             </Link>
         )
@@ -116,8 +117,6 @@ const CardContainer: React.FC = () => {
 
         setPodcasts(final)
     }
-
-    const auth = useContext(AuthContext)
 
     return (
         <Container>

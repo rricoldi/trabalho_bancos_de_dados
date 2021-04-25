@@ -42,7 +42,9 @@ const useAudio = (url: string) => {
 const Episode: React.FC<Props> = ({id, podcastId, image, name, audioUrl}: Props) => {
 
     const [playing, toggle] = useAudio(audioUrl)
-    const { logged, id:userId } = useContext(AuthContext)
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}')
+
+    const { logged, id:userId } = auth
 
     const [liked, setLiked] = useState(false)
     const [likes, setLikes] = useState(0)

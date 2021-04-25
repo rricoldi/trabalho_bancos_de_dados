@@ -11,8 +11,7 @@ const UserLogin: React.FC = () => {
     const [password, setPassword] = useState('')
 
     const history = useHistory()
-
-    const auth = useContext(AuthContext)
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}')
 
     function handleChange(value: string,fn: React.Dispatch<React.SetStateAction<string>>) {
         fn(value)
@@ -32,13 +31,13 @@ const UserLogin: React.FC = () => {
                 alert(data.data.status)
             } else {
                 console.log(data)
-                auth.setData({
+                localStorage.setItem('auth', JSON.stringify({
                     ...auth,
                     id: data.data.id,
                     name: data.data.nome,
                     sex: data.data.sexo,
                     logged: true
-                })
+                }))
                 history.push('/')
             }
         })

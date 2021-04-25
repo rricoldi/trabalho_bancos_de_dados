@@ -7,6 +7,7 @@ import UserRegister from '../pages/UserRegister'
 import UserLogin from '../pages/UserLogin'
 import Podcast from '../pages/Podcast'
 import AuthContext, { AuthContextData } from '../context/AuthContext'
+import Log from '../pages/Log'
 
 const Routes: React.FC = () => {
     const [context, setContext] = useState<AuthContextData>({
@@ -26,6 +27,7 @@ const Routes: React.FC = () => {
                 <Route path='/user/register' exact component={UserRegister} />
                 <Route path='/user/login' exact component={UserLogin} />
                 <Route path='/podcast/:id' exact component={Podcast} />
+                <Route path='/log' exact component={Log} />
             </Switch>
         </AuthContext.Provider>
 

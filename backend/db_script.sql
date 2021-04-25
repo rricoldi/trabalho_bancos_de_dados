@@ -8,7 +8,6 @@ create table trabalho.podcast(
     nome varchar(100) not null,
     site varchar(200) not null,
   	email varchar(100),
-    --vizualizacoes integer default 0,
     constraint pk_podcast PRIMARY KEY(id)
 );
 

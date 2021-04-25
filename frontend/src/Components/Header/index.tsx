@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import { Button, Container, User, Title } from './styles'
 import micImage from '../../assets/Mic.png'
@@ -6,8 +6,7 @@ import AuthContext from '../../context/AuthContext'
 import { Link } from 'react-router-dom'
 
 const Header: React.FC = () => {
-
-    const auth = useContext(AuthContext)
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}')
 
     if(auth.logged === true) {
         return (
@@ -19,6 +18,7 @@ const Header: React.FC = () => {
                     </Title>
                 </Link>
                 <Button>
+                    <Link to='/log'>Gráficos</Link>
                     <Link to='/podcast/register'>Cadastrar Podcast</Link>
                     <User>
                         {
@@ -49,6 +49,7 @@ const Header: React.FC = () => {
                 <Button>
                     <a></a>
                     <a></a>
+                    <Link to='/log'>Gráficos</Link>
                     <Link to='/user/register'>Cadastrar</Link>
                     <Link to='/user/login'>Entrar</Link>
                 </Button>

@@ -13,7 +13,6 @@ public class Podcast {
     String nome;
     String site;
     String email;
-    int vizualizacoes;
 
     public String getId() {
         return id;
@@ -54,13 +53,4 @@ public class Podcast {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public int getVizualizacoes() {
-        return vizualizacoes;
-    }
-
-    public void setVizualizacoes(int vizualizacoes) {
-        this.vizualizacoes = vizualizacoes;
-    }
-    
 }

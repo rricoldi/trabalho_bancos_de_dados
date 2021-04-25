@@ -75,16 +75,14 @@ const Register: React.FC = () => {
                     <div>
                         <h1>Tag</h1>
                         <select value={tag} onChange={ (event) => setTag(event.target.value) }>
-                            <option value='Terror'>Terror</option>
-                            <option value='Comédia'>Comédia</option>
-                            <option value='True Crime'>True Crime</option>
-                            <option value='Animes'>Animes</option>
-                            <option value='Filmes'>Filmes</option>
-                            <option value='Série'>Série</option>
-                            <option value='Tecnologia'>Tecnologia</option>
-                            <option value='Educação'>Educação</option>
-                            <option value='Áudio Book'>Áudio Book</option>
-                            <option value='Programação'>Programação</option>
+                            <option value="Cinema">Cinema</option>
+                            <option value="Dia a Dia">Dia a Dia</option>
+                            <option value="Tecnologia">Tecnologia</option>
+                            <option value="Comédia">Comédia</option>
+                            <option value="Prgramação">Prgramação</option>
+                            <option value="Terror">Terror</option>
+                            <option value="Programação">Programação</option>
+                            <option value="Educação">Educação</option>
                         </select>
                     </div>
                     <button type='submit'>

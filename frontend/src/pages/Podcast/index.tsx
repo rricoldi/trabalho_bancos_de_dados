@@ -50,8 +50,9 @@ const Podcast: React.FC<Props> = () => {
     const [comments, setComments] = useState<string[]>([])
 
     const [message, setMessage] = useState('')
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}')
 
-    const { podcastUrl, id:userId, logged } = useContext(AuthContext)
+    const { podcastUrl, id:userId, logged } = auth
 
     const { params } = useRouteMatch<Params>()
     const podcastId = params.id
