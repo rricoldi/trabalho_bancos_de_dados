@@ -26,6 +26,7 @@ import br.uel.trabalho.repositories.EpisodioRepository;
 import br.uel.trabalho.repositories.InscricaoRepository;
 import br.uel.trabalho.repositories.PodcastRepository;
 import br.uel.trabalho.repositories.UsuarioRepository;
+import br.uel.trabalho.repositories.LogAcessoRepository;
 import br.uel.trabalho.services.RestService;
 
 @RestController
@@ -51,6 +52,9 @@ public class PodcastController {
 
 	@Autowired
 	ClassificacaoRepository classificacaoRep;
+
+	@Autowired
+	LogAcessoRepository logAcessoRep;
 
 	org.slf4j.Logger logger = LoggerFactory.getLogger(PodcastController.class);
 	RestService restService = new RestService();
@@ -122,7 +126,7 @@ public class PodcastController {
 			if(podcast == null) {
                 throw new Exception("Null");
             }
-			podcastRepository.addVizualizacao(pod_id);
+			logAcessoRep.save(UUID.randomUUID().toString(), pod_id, usr_id);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");
