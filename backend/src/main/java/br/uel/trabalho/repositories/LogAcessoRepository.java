@@ -1,17 +1,12 @@
 package br.uel.trabalho.repositories;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.TypedQuery;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import br.uel.trabalho.models.LogAcesso;
-import net.minidev.json.JSONObject;
 
 @Repository
 public interface LogAcessoRepository extends JpaRepository<LogAcesso, String>  {

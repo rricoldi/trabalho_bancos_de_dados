@@ -22,6 +22,7 @@ import br.uel.trabalho.repositories.PodcastRepository;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONArray;
+import org.apache.tomcat.util.json.JSONParser;
 
 @RestController
 @RequestMapping("/usuario")
@@ -90,6 +91,54 @@ public class UsuarioController {
 
 		return response;
 	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/PodsMaisAcessados/{usr_id}", method=RequestMethod.GET)
+	public JSONObject podsMaisAcessados(@PathVariable("usr_id") String usr_id) {
+		JSONObject response = new JSONObject();
+        
+		try {
+			String rtn = usuarioRepository.getMostAccessedPodsByUsr(usr_id);
+			JSONParser jsonParser = new JSONParser(rtn);
+			JSONObject obj = new JSONObject(jsonParser.parseObject());
+
+			response.put("code", "201");
+			response.put("query", obj.get("query"));
+			
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("status", "Averages creation failed.");
+			response.put("code", "400");
+			
+			return response;
+		}
+    }
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/TagsMaisAcessadas/{usr_id}", method=RequestMethod.GET)
+	public JSONObject tagsMaisAcessadas(@PathVariable("usr_id") String usr_id) {
+		JSONObject response = new JSONObject();
+        
+		try {
+			String rtn = usuarioRepository.getMostAccessedTagsByUsr(usr_id);
+			JSONParser jsonParser = new JSONParser(rtn);
+			JSONObject obj = new JSONObject(jsonParser.parseObject());
+
+			response.put("code", "201");
+			response.put("query", obj.get("query"));
+			
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("status", "Averages creation failed.");
+			response.put("code", "400");
+			
+			return response;
+		}
+    }
 
 	@CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value="/", method=RequestMethod.POST)

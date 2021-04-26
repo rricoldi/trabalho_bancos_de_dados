@@ -203,6 +203,78 @@ public class PodcastController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/PodsMaisInscritos/", method=RequestMethod.GET)
+	public JSONObject podsMaisInscritos() {
+		JSONObject response = new JSONObject();
+        
+		try {
+			String rtn = podcastRepository.getMostSubsPods();
+			JSONParser jsonParser = new JSONParser(rtn);
+			JSONObject obj = new JSONObject(jsonParser.parseObject());
+
+			response.put("code", "201");
+			response.put("query", obj.get("query"));
+			
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("status", "Averages creation failed.");
+			response.put("code", "400");
+			
+			return response;
+		}
+    }
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/PodsMaisClassificados/", method=RequestMethod.GET)
+	public JSONObject podsMaisClassificados() {
+		JSONObject response = new JSONObject();
+        
+		try {
+			String rtn = podcastRepository.getMostClassifiedPods();
+			JSONParser jsonParser = new JSONParser(rtn);
+			JSONObject obj = new JSONObject(jsonParser.parseObject());
+
+			response.put("code", "201");
+			response.put("query", obj.get("query"));
+			
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("status", "Averages creation failed.");
+			response.put("code", "400");
+			
+			return response;
+		}
+    }
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/PodsMaisComentados/", method=RequestMethod.GET)
+	public JSONObject podsMaisComentados() {
+		JSONObject response = new JSONObject();
+        
+		try {
+			String rtn = podcastRepository.getMostCommentedPods();
+			JSONParser jsonParser = new JSONParser(rtn);
+			JSONObject obj = new JSONObject(jsonParser.parseObject());
+
+			response.put("code", "201");
+			response.put("query", obj.get("query"));
+			
+			return response;
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+
+			response.put("status", "Averages creation failed.");
+			response.put("code", "400");
+			
+			return response;
+		}
+    }
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createPodcast(@RequestBody Podcast podcast) {
 		JSONObject response = new JSONObject();

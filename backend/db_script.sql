@@ -309,7 +309,163 @@ BEGIN
 END
 $$ LANGUAGE PLPGSQL;
 
+-- Podcasts mais acessados por usuário
+CREATE OR REPLACE FUNCTION trabalho.getMostAccessedPodsByUsr(param_usr_id VARCHAR(40)) RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"query": [ ';
+	FOR f IN 
+		select p.nome pod_nome, a.acessos acessos from 
+			trabalho.podcast p join (
+      			select pod_id, count(pod_id) acessos from
+        			trabalho.usuario u join trabalho.log_acesso a on u.id = a.usr_id
+        			where u.id = param_usr_id
+        			group by pod_id
+   			) a on p.id = a.pod_id
+    		order by acessos desc
+	LOOP
+		rtn = rtn || 
+			'{
+				"pod_nome": "'|| f.pod_nome ||'",
+				"acessos": '|| f.acessos ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
 
+-- Tags mais acessadas por usuário
+CREATE OR REPLACE FUNCTION trabalho.getMostAccessedTagsByUsr(param_usr_id VARCHAR(40)) RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"query": [ ';
+	FOR f IN 
+		select tag, count(tag) acessos from 
+			trabalho.tags_podcast t join (
+				select pod_id from
+			  		trabalho.usuario u join trabalho.log_acesso a on u.id = a.usr_id
+			  		where u.id = param_usr_id
+			) l on t.pod_id = l.pod_id
+		group by tag
+		order by acessos desc
+	LOOP
+		rtn = rtn || 
+			'{
+				"tag": "'|| f.tag ||'",
+				"acessos": '|| f.acessos ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
 
+-- Podcasts com mais inscritos
+CREATE OR REPLACE FUNCTION trabalho.getMostSubsPods() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"query": [ ';
+	FOR f IN 
+		select id, nome, count(id) inscritos from
+			trabalho.podcast p join trabalho.usuario_esta_inscrito_no_podcast u on p.id = u.pod_id
+		group by p.id
+		order by inscritos desc
+	LOOP
+		rtn = rtn || 
+			'{
+				"id": "'|| f.id ||'",
+				"nome": "'|| f.nome ||'",
+				"inscritos": '|| f.inscritos ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
 
+-- Podcasts com melhor classificação
+CREATE OR REPLACE FUNCTION trabalho.getMostClassifiedPods() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"query": [ ';
+	FOR f IN 
+		select p.id, p.nome, avg(classificacao) classificacao from
+			trabalho.podcast p join trabalho.usuario_esta_inscrito_no_podcast u on p.id = u.pod_id
+		group by p.id
+    	order by classificacao desc
+	LOOP
+		rtn = rtn || 
+			'{
+				"id": "'|| f.id ||'",
+				"nome": "'|| f.nome ||'",
+				"classificacao": '|| f.classificacao ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;
 
+-- Podcasts mais comentados.
+CREATE OR REPLACE FUNCTION trabalho.getMostCommentedPods() RETURNS VARCHAR AS $$
+DECLARE
+	f RECORD;
+	rtn VARCHAR;
+BEGIN
+	rtn = '{"query": [ ';
+	FOR f IN 
+		select p.id, nome, count(p.id) comentarios from
+			trabalho.podcast p join trabalho.comentarios_podcast_usuario u on p.id = u.pod_id
+		group by p.id
+		order by comentarios desc
+	LOOP
+		rtn = rtn || 
+			'{
+				"id": "'|| f.id ||'",
+				"nome": "'|| f.nome ||'",
+				"comentarios": '|| f.comentarios ||'
+			},';
+	END LOOP;
+	
+	PERFORM substr(rtn, 1, length(rtn) - 2);
+	
+	rtn = LEFT(rtn, -1);
+	
+	rtn = rtn || ']}';
+    
+	RETURN rtn::jsonb;
+END
+$$ LANGUAGE PLPGSQL;

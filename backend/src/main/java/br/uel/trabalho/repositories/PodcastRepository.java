@@ -33,6 +33,15 @@ public interface PodcastRepository extends JpaRepository<Podcast, String> {
 	@Query(value="SELECT trabalho.geraRelatorioPodcast(?1);", nativeQuery = true)
 	String relatorioPodcast(String pod_id);
 
+    @Query(value="SELECT trabalho.getMostSubsPods();", nativeQuery = true)
+	String getMostSubsPods();
+
+    @Query(value="SELECT trabalho.getMostClassifiedPods();", nativeQuery = true)
+	String getMostClassifiedPods();
+
+    @Query(value="SELECT trabalho.getMostCommentedPods();", nativeQuery = true)
+	String getMostCommentedPods();
+
     @Query(value="UPDATE trabalho.podcast SET rss_feed = ?2, nome = ?3, site = ?4, email = ?5 WHERE id = ?1 RETURNING *", nativeQuery = true)
     Podcast update(String id, String new_rss_feed, String new_nome, String new_site, String new_email);
 
