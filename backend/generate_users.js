@@ -62,7 +62,7 @@ for(let i = 0; i < 600; i++) {
 
 query += `INSERT INTO trabalho.tags_podcast VALUES ('Comédia', 'af46a958-b921-47b6-9f87-5c4fdc68ea79');\n`
 query += `INSERT INTO trabalho.tags_podcast VALUES ('Dia a Dia', 'fa3abe16-3645-4d22-a01d-893e6f20c408');\n`
-query += `INSERT INTO trabalho.tags_podcast VALUES ('Prgramação', 'f8e13774-d631-4f34-93f0-2f5d55590265');\n`
+query += `INSERT INTO trabalho.tags_podcast VALUES ('Programação', 'f8e13774-d631-4f34-93f0-2f5d55590265');\n`
 query += `INSERT INTO trabalho.tags_podcast VALUES ('Comédia', 'de2f0ddb-9903-436a-a5e2-54224254c818');\n`
 query += `INSERT INTO trabalho.tags_podcast VALUES ('Cinema', '67074e68-bc2f-442b-8af2-7d328b6af6eb');\n`
 query += `INSERT INTO trabalho.tags_podcast VALUES ('Cinema', 'bc8dac25-793c-4a96-aafc-4ea7020f4f60');\n`
@@ -80,18 +80,3 @@ fs.writeFile('query.sql', query, function (err,data) {
       return console.log(err);
     }
 });
-
-console.log(query)
-
-/*
--- INSCRICOES
-INSERT INTO trabalho.usuario_esta_inscrito_no_podcast VALUES (3, 'podcast_001', 'usr_001');
-INSERT INTO trabalho.usuario_esta_inscrito_no_podcast VALUES (4, 'podcast_002', 'usr_001');
-INSERT INTO trabalho.usuario_esta_inscrito_no_podcast VALUES (7, 'podcast_001', 'usr_002');
-INSERT INTO trabalho.usuario_esta_inscrito_no_podcast VALUES (2, 'podcast_001', 'usr_003');
-
--- COMENTARIOS EM PODCASTS
-INSERT INTO trabalho.comentarios_podcast_usuario VALUES ('cmt_pod_001', 'I love this podcast bro', 'podcast_001', 'usr_003');
-INSERT INTO trabalho.comentarios_podcast_usuario VALUES ('cmt_pod_002', 'Meio q n sei', 'podcast_001', 'usr_001');
-INSERT INTO trabalho.comentarios_podcast_usuario VALUES ('cmt_pod_003', 'Gosto duns episodio ai', 'podcast_002', 'usr_004');
-*/

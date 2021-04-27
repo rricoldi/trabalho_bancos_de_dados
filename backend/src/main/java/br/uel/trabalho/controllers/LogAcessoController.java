@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,8 @@ public class LogAcessoController {
 
     org.slf4j.Logger logger = LoggerFactory.getLogger(LogAcessoController.class);
 
-    @RequestMapping(value="/", method=RequestMethod.GET)
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/", method=RequestMethod.GET)
 	public List<LogAcesso> listAcessos() {
 		List<LogAcesso> lista = new ArrayList<>();
 		JSONObject response = new JSONObject();
@@ -53,6 +55,7 @@ public class LogAcessoController {
 		return lista;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/findByPodcast/{id}", method=RequestMethod.GET)
 	public JSONObject findAcessoByPodcast(@PathVariable("id") String id) {
 		List<LogAcesso> tag;
@@ -72,7 +75,8 @@ public class LogAcessoController {
 		return response;
 	}
 
-    @RequestMapping(value="/findByUsuario/{id}", method=RequestMethod.GET)
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/findByUsuario/{id}", method=RequestMethod.GET)
 	public JSONObject findAcessoByUsuario(@PathVariable("id") String id) {
 		List<LogAcesso> tag;
 		JSONObject response = new JSONObject();
@@ -91,7 +95,8 @@ public class LogAcessoController {
 		return response;
 	}
 
-    @RequestMapping(value="/findByUsuarioPodcast/{usr_id}/{pod_id}", method=RequestMethod.GET)
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/findByUsuarioPodcast/{usr_id}/{pod_id}", method=RequestMethod.GET)
 	public JSONObject findAcessoByUsuarioPodcast(@PathVariable("usr_id") String usr_id, @PathVariable("pod_id") String pod_id) {
 		List<LogAcesso> tag;
 		JSONObject response = new JSONObject();
@@ -110,18 +115,19 @@ public class LogAcessoController {
 		return response;
 	}
 
-    @RequestMapping(value="/", method=RequestMethod.POST)
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value="/", method=RequestMethod.POST)
 	public JSONObject createAcesso(@RequestBody LogAcesso lAcesso) {
 		JSONObject response = new JSONObject();
-        LogAcesso created;
+		LogAcesso created;
         
 		try {
-            created = logAcessoRepository.save(UUID.randomUUID().toString(), lAcesso.getPod_id(), lAcesso.getUsr_id());
-			if(created.getId().equals(lAcesso.getId())) {
+			created = logAcessoRepository.save(UUID.randomUUID().toString(), lAcesso.getPod_id(), lAcesso.getUsr_id());
+			if(created.getPod_id().equals(lAcesso.getPod_id())) {
 				response.put("code", "201");
 				response.put("tag", created);
 			} else {
-				response.put("status", "Tag Created Wrong.");
+				response.put("status", "Log Created Wrong.");
 				response.put("code", "400");
 			}
 			
@@ -136,6 +142,7 @@ public class LogAcessoController {
 		}
     }
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/mediaIdadesPodcast", method=RequestMethod.GET)
 	public JSONObject mediaIdadesByPodcast() {
 		JSONObject response = new JSONObject();
@@ -159,6 +166,7 @@ public class LogAcessoController {
 		}
     }
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/podcastsMaisVistos", method=RequestMethod.GET)
 	public JSONObject podcastsMaisVistos() {
 		JSONObject response = new JSONObject();
@@ -182,6 +190,7 @@ public class LogAcessoController {
 		}
     }
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/tagsMaisVistas", method=RequestMethod.GET)
 	public JSONObject tagsMaisVistos() {
 		JSONObject response = new JSONObject();
@@ -205,6 +214,7 @@ public class LogAcessoController {
 		}
     }
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/mediaIdadesTag", method=RequestMethod.GET)
 	public JSONObject mediaIdadesByTag() {
 		JSONObject response = new JSONObject();

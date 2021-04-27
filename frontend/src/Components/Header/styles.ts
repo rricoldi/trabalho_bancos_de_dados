@@ -33,7 +33,7 @@ export const Button = styled.div`
     justify-content: space-between;
     align-items: center;
     margin: 0 85px 0 0;
-    max-width: 400px;
+    max-width: 600px;
 
     a {
         font: 18px 'DM Sans', sans-serif;

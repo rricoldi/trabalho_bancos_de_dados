@@ -79,7 +79,6 @@ const Register: React.FC = () => {
                             <option value="Dia a Dia">Dia a Dia</option>
                             <option value="Tecnologia">Tecnologia</option>
                             <option value="Comédia">Comédia</option>
-                            <option value="Prgramação">Prgramação</option>
                             <option value="Terror">Terror</option>
                             <option value="Programação">Programação</option>
                             <option value="Educação">Educação</option>

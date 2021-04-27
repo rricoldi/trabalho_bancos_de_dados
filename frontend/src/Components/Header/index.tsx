@@ -33,7 +33,7 @@ const Header: React.FC = () => {
                         <a href="#">{auth.name}</a>
                     </User>
 
-                    <a href="/" onClick={() => { auth.setData({ ...auth, logged: false }) }}>Sair</a>
+                    <a href="/" onClick={() => { localStorage.removeItem('auth') }}>Sair</a>
                 </Button>
             </Container>
         )

@@ -17,11 +17,10 @@ interface Podcast {
     url: string
 }
 
-
-
 const CardContainer: React.FC = () => {
     const [subscribes, setSubscribes] = useState<Podcast[]>([] as Podcast[])
     const [podcasts, setPodcasts] = useState<Podcast[]>([] as Podcast[])
+    const [allPodcasts, setAllPodcasts] = useState<Podcast[]>([] as Podcast[])
     const [search, setSearch] = useState('')
     const auth = JSON.parse(localStorage.getItem('auth') || '{}')
 
@@ -46,6 +45,7 @@ const CardContainer: React.FC = () => {
             }
 
             setPodcasts(final)
+            setAllPodcasts(final)
         }
 
         const subs = async () => {
@@ -76,7 +76,13 @@ const CardContainer: React.FC = () => {
 
     const MenuItem = ({ id, image, url }: Podcast) => {
         return (
-            <Link to={`/podcast/${id}`} onClick={() => localStorage.setItem('auth', JSON.stringify({...auth, podcastUrl: url}))} >
+            <Link to={`/podcast/${id}`} onClick={async () => {
+                localStorage.setItem('auth', JSON.stringify({...auth, podcastUrl: url}))
+                auth.logged && await api.post('/logAcesso/', {
+                    pod_id: id,
+                    usr_id: auth.id
+                })
+            }} >
                 <PodcastCard about={image}/>
             </Link>
         )
@@ -96,7 +102,7 @@ const CardContainer: React.FC = () => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         if(search==='')
-            return
+            return setPodcasts(allPodcasts)
         const result = await api.get(`podcast/keyword/${search}`)
         const final = []
         for(let i = 0; i < result.data.podcast.length; i++) {

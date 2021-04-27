@@ -79,7 +79,7 @@ const Podcast: React.FC<Props> = () => {
                             audio: episode.enclosure._attributes.url
                         }
                     }),
-                    stars: additional.data.estrelas,
+                    stars: additional.data.estrelas.toFixed(2),
                     userStars: additional.data.estrelas_do_usuario,
                     comments: additional.data.comentarios,
                     subscribed: additional.data.inscrito,
