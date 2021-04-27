@@ -163,7 +163,6 @@ BEGIN
 	END LOOP;
 	
     hash = 'B3G_3NCR!PT@T!0N_' || hash || '_3ND_3NCR!PT@T!0N';
-	RAISE NOTICE '%', hash;	
     
 	RETURN md5(hash);
 END
@@ -185,9 +184,9 @@ DECLARE
 BEGIN
 	rtn = '{"acessos": [ ';
 	FOR f IN SELECT la.pod_id pod_id, p.nome pod_nome, COUNT(*) nAcessos FROM trabalho.log_acesso la
-	JOIN trabalho.podcast p ON la.pod_id = p.id
-	GROUP BY pod_id, pod_nome
-	ORDER BY nAcessos DESC
+		JOIN trabalho.podcast p ON la.pod_id = p.id
+		GROUP BY pod_id, pod_nome
+		ORDER BY nAcessos DESC
 	LOOP
 		rtn = rtn || 
 			'{

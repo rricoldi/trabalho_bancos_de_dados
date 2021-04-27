@@ -126,7 +126,7 @@ public class PodcastController {
 			if(podcast == null) {
                 throw new Exception("Null");
             }
-			logAcessoRep.save(UUID.randomUUID().toString(), pod_id, usr_id);
+			
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			response.put("code", "400");

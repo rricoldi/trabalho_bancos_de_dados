@@ -390,7 +390,7 @@ const Log: React.FC = () => {
                                         labels: viewsU.map((view) => view.pod_nome),
                                         datasets: [{
                                             label: 'Seus podcast mais acessados',
-                                            data: viewsU.map(view => Math.floor(view.acessos/3)),
+                                            data: viewsU.map(view => Math.floor(view.acessos)),
                                             backgroundColor: [
                                                 'rgb(54, 163, 235)',
                                                 'rgb(2, 255, 44)',
@@ -426,7 +426,7 @@ const Log: React.FC = () => {
                                         labels: viewsUT.map((view) => view.tag),
                                         datasets: [{
                                             label: 'Seus podcast mais acessados',
-                                            data: viewsUT.map(view => Math.floor(view.acessos/3)),
+                                            data: viewsUT.map(view => Math.floor(view.acessos)),
                                             backgroundColor: [
                                                 'rgb(54, 163, 235)',
                                                 'rgb(2, 255, 44)',

@@ -41,7 +41,7 @@ for(let i = 0; i < 600; i++) {
     const gender = genders[faker.datatype.number(1)]
     const name = faker.name.firstName(gender)
     const lastName = faker.name.lastName()
-    query += `INSERT INTO trabalho.usuario VALUES ('usr_${i}', '${i}_${faker.internet.email(name, lastName)}', '${name} ${lastName}', '${gender}', ${faker.datatype.number(60)}, 'password', '${faker.address.country()}');\n`
+    query += `INSERT INTO trabalho.usuario VALUES ('usr_${i}', '${i}_${faker.internet.email(name, lastName)}', '${name} ${lastName}', '${gender}', ${faker.datatype.number(60)}, trabalho.hashPassword('Password123'), '${faker.address.country()}');\n`
     const ids = []
 
     for(let j = 0; j < 3; j++) {
